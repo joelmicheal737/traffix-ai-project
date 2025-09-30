@@ -1,0 +1,29 @@
+timestamp,location,vehicle_count,avg_speed,congestion_level,weather,day_of_week
+2024-01-01 08:00:00,Gandhipuram,245,25.5,high,clear,monday
+2024-01-01 08:15:00,Gandhipuram,267,22.3,high,clear,monday
+2024-01-01 08:30:00,Gandhipuram,289,18.7,very_high,clear,monday
+2024-01-01 08:45:00,Gandhipuram,312,15.2,very_high,clear,monday
+2024-01-01 09:00:00,Gandhipuram,298,19.8,high,clear,monday
+2024-01-01 09:15:00,Gandhipuram,276,24.1,high,clear,monday
+2024-01-01 09:30:00,Gandhipuram,254,28.9,medium,clear,monday
+2024-01-01 08:00:00,RS Puram,189,32.1,medium,clear,monday
+2024-01-01 08:15:00,RS Puram,201,29.7,medium,clear,monday
+2024-01-01 08:30:00,RS Puram,223,26.4,high,clear,monday
+2024-01-01 08:45:00,RS Puram,245,23.8,high,clear,monday
+2024-01-01 09:00:00,RS Puram,234,25.9,high,clear,monday
+2024-01-01 09:15:00,RS Puram,212,30.2,medium,clear,monday
+2024-01-01 09:30:00,RS Puram,198,33.5,medium,clear,monday
+2024-01-01 08:00:00,Peelamedu,156,38.2,low,clear,monday
+2024-01-01 08:15:00,Peelamedu,167,35.8,low,clear,monday
+2024-01-01 08:30:00,Peelamedu,178,33.1,medium,clear,monday
+2024-01-01 08:45:00,Peelamedu,189,30.7,medium,clear,monday
+2024-01-01 09:00:00,Peelamedu,182,32.4,medium,clear,monday
+2024-01-01 09:15:00,Peelamedu,171,35.9,low,clear,monday
+2024-01-01 09:30:00,Peelamedu,163,37.8,low,clear,monday
+2024-01-01 08:00:00,Saibaba Colony,134,41.2,low,clear,monday
+2024-01-01 08:15:00,Saibaba Colony,142,38.9,low,clear,monday
+2024-01-01 08:30:00,Saibaba Colony,151,36.5,low,clear,monday
+2024-01-01 08:45:00,Saibaba Colony,159,34.2,medium,clear,monday
+2024-01-01 09:00:00,Saibaba Colony,154,35.8,low,clear,monday
+2024-01-01 09:15:00,Saibaba Colony,147,38.1,low,clear,monday
+2024-01-01 09:30:00,Saibaba Colony,139,40.3,low,clear,monday
