@@ -38,12 +38,8 @@ const Home = () => {
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex justify-center mb-8">
-              <img 
-                src="/ChatGPT Image Sep 28, 2025, 01_46_59 PM.png" 
-                alt="Traffix AI Logo" 
-                className="h-24 w-auto"
-              />
+            <div className="flex justify-center mb-8 text-6xl">
+              🚦
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               Traffix AI

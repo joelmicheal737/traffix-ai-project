@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { MapPin, TrendingUp, Clock, AlertTriangle } from 'lucide-react';
-import SimpleMap from '../components/SimpleMap';
+import CoimbatoreLeafletMap from '../components/CoimbatoreLeafletMap';
 
 interface TrafficData {
   timestamp: string;
@@ -235,8 +235,12 @@ const Dashboard = () => {
         {/* Map and Controls */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Coimbatore Map</h2>
-            <SimpleMap height="500px" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Coimbatore Traffic Map</h2>
+            <CoimbatoreLeafletMap 
+              height="500px" 
+              trafficData={mapData}
+              showTrafficMarkers={true}
+            />
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md">

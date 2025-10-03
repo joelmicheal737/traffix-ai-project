@@ -59,12 +59,8 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="flex justify-center mb-8">
-            <img 
-              src="/ChatGPT Image Sep 28, 2025, 01_46_59 PM.png" 
-              alt="Traffix AI Logo" 
-              className="h-20 w-auto"
-            />
+          <div className="flex justify-center mb-8 text-5xl">
+            🚦
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">About Traffix AI</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
