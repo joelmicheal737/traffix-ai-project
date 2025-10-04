@@ -17,7 +17,7 @@ const AIPrediction = () => {
   const [error, setError] = useState<string>('');
   const [locations, setLocations] = useState<string[]>([]);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
   useEffect(() => {
     fetchLocations();
@@ -25,7 +25,12 @@ const AIPrediction = () => {
 
   const fetchLocations = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/locations`);
+      const response = await fetch(`${API_BASE_URL}/locations`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setLocations(data.locations);
@@ -37,6 +42,7 @@ const AIPrediction = () => {
       }
     } catch (error) {
       console.error('Error fetching locations:', error);
+      setError('Backend server not available. Using default locations.');
       // Use default locations if API is not available
       setLocations(['Gandhipuram', 'RS Puram', 'Peelamedu', 'Saibaba Colony']);
     }
