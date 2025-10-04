@@ -89,6 +89,15 @@ def main():
         logger.info(f"  Reload: {reload}")
         logger.info(f"  Workers: {workers}")
         
+        # Print startup message
+        print("\n" + "="*60)
+        print("🚦 TRAFFIX AI BACKEND SERVER STARTING 🚦")
+        print("="*60)
+        print(f"📍 Backend API: http://{host}:{port}")
+        print(f"📚 API Docs: http://{host}:{port}/docs")
+        print(f"🔄 Auto-reload: {reload}")
+        print("="*60 + "\n")
+        
         # Start server
         uvicorn.run(
             "main:app",

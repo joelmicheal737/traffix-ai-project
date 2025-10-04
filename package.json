@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json"
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "start": "npm run dev",
+    "backend": "cd backend && python run.py",
+    "full-stack": "concurrently \"npm run dev\" \"npm run backend\""
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.0",

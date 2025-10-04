@@ -2,6 +2,50 @@
 
 A comprehensive traffic management and prediction system for Coimbatore using AI/ML technologies.
 
+## 🚀 Quick Start - Run on Localhost
+
+### Prerequisites
+- Node.js 18+ (for frontend)
+- Python 3.8+ (for backend)
+- Git (optional)
+
+### Step 1: Frontend Setup
+```bash
+# Install frontend dependencies
+npm install
+
+# Start frontend development server
+npm run dev
+```
+Frontend will run on: **http://localhost:5173**
+
+### Step 2: Backend Setup
+```bash
+# Open new terminal and navigate to backend
+cd backend
+
+# Create Python virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Start backend server
+python run.py
+```
+Backend will run on: **http://localhost:8000**
+
+### Step 3: Access the Application
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
+
 ## Features
 
 ### Frontend (React + Vite + Tailwind)
