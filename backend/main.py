@@ -111,6 +111,92 @@ async def startup_event():
                 ('Ondipudur', 110, 48, 'low'),
                 ('Kuniyamuthur', 130, 43, 'low'),
                 ('Vilankurichi', 125, 44, 'low'),
+                
+                # ADDITIONAL 70 LOCATIONS FOR COMPREHENSIVE COVERAGE
+                
+                # Extended Commercial & Business Areas
+                ('Sitra', 180, 32, 'medium'),
+                ('Ramnagar', 160, 35, 'medium'),
+                ('Tatabad', 220, 28, 'high'),
+                ('Pappanaickenpalayam', 170, 33, 'medium'),
+                ('Ramanathapuram', 150, 36, 'medium'),
+                ('Selvapuram', 130, 40, 'low'),
+                ('Ganapathy', 160, 35, 'medium'),
+                ('Koundampalayam', 120, 42, 'low'),
+                ('Kuniamuthur', 140, 38, 'medium'),
+                ('Podanur Junction', 230, 26, 'high'),
+                
+                # Extended IT & Tech Areas
+                ('Keeranatham', 170, 34, 'medium'),
+                ('Chinnavedampatti', 110, 45, 'low'),
+                ('Kovaipudur', 150, 37, 'medium'),
+                ('Thondamuthur', 120, 42, 'low'),
+                ('Narasimhanaickenpalayam', 100, 48, 'low'),
+                ('Vellalore', 90, 50, 'low'),
+                ('Madampatti', 80, 52, 'low'),
+                ('Idikarai', 70, 55, 'low'),
+                ('Chettipalayam', 80, 52, 'low'),
+                ('Kinathukadavu', 60, 58, 'low'),
+                
+                # Extended Educational Areas
+                ('Anna University Coimbatore', 160, 35, 'medium'),
+                ('Amrita University', 140, 38, 'medium'),
+                ('Karunya University', 120, 42, 'low'),
+                ('PSGR Krishnammal College', 130, 40, 'low'),
+                ('SNS College of Technology', 110, 45, 'low'),
+                ('Karpagam University', 150, 37, 'medium'),
+                ('Sri Krishna College of Engineering', 100, 48, 'low'),
+                ('Kumaraguru College of Technology', 170, 34, 'medium'),
+                ('Dr. Mahalingam College of Engineering', 90, 50, 'low'),
+                ('Hindusthan College of Engineering', 120, 42, 'low'),
+                
+                # Extended Residential Areas
+                ('Hopes College Junction', 180, 32, 'medium'),
+                ('Lakshmi Mills Junction', 250, 25, 'high'),
+                ('Flower Market Road', 220, 28, 'high'),
+                ('Vegetable Market Area', 230, 26, 'high'),
+                ('Textile Market Junction', 170, 33, 'medium'),
+                ('Oppanakara Street', 160, 35, 'medium'),
+                ('Nehru Street Junction', 150, 37, 'medium'),
+                ('Big Bazaar Street', 200, 30, 'high'),
+                ('Diwan Bahadur Road', 140, 38, 'medium'),
+                ('Bharathi Park Road', 120, 42, 'low'),
+                
+                # Extended Industrial Areas
+                ('SIDCO Industrial Estate', 170, 34, 'medium'),
+                ('Coimbatore Export Promotion Industrial Park', 150, 37, 'medium'),
+                ('Kurichi Industrial Area', 220, 28, 'high'),
+                ('Kalapatti Industrial Estate', 160, 35, 'medium'),
+                ('Perur Industrial Area', 140, 38, 'medium'),
+                ('Neelambur Industrial Park', 130, 40, 'low'),
+                ('Malumichampatti Industrial Area', 110, 45, 'low'),
+                ('Ondipudur Industrial Estate', 150, 37, 'medium'),
+                ('Sulur Industrial Park', 100, 48, 'low'),
+                ('Annur Industrial Area', 90, 50, 'low'),
+                
+                # Extended Transport & Highway Junctions
+                ('Singanallur Bus Stand', 260, 24, 'high'),
+                ('Peelamedu Bus Stand', 180, 32, 'medium'),
+                ('Vadavalli Bus Stop', 150, 37, 'medium'),
+                ('Thudiyalur Bus Stop', 140, 38, 'medium'),
+                ('Saravanampatti Bus Stop', 130, 40, 'low'),
+                ('Kuniyamuthur Bus Stop', 120, 42, 'low'),
+                ('Podanur Railway Station', 170, 34, 'medium'),
+                ('Irugur Railway Station', 110, 45, 'low'),
+                ('Periyanayakkanpalayam Railway Station', 90, 50, 'low'),
+                ('Coimbatore North Railway Station', 160, 35, 'medium'),
+                
+                # Extended Major Road Intersections
+                ('Avinashi Road - Trichy Road Junction', 280, 22, 'high'),
+                ('Pollachi Road - Sathy Road Junction', 170, 33, 'medium'),
+                ('Mettupalayam Road - Avinashi Road Junction', 150, 37, 'medium'),
+                ('Salem Road - Trichy Road Junction', 140, 38, 'medium'),
+                ('Palakkad Road - Pollachi Road Junction', 130, 40, 'low'),
+                ('Sathy Road - Mettupalayam Road Junction', 120, 42, 'low'),
+                ('Trichy Road - Salem Road Junction', 160, 35, 'medium'),
+                ('Avinashi Road - Salem Road Junction', 150, 37, 'medium'),
+                ('Pollachi Road - Palakkad Road Junction', 140, 38, 'medium'),
+                ('Mettupalayam Road - Sathy Road Junction', 110, 45, 'low'),
             ]
             
             # Generate data for the last 7 days with hourly intervals

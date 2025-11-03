@@ -72,7 +72,43 @@ const AIPrediction = () => {
         'KMCH Hospital', 'PSG Hospitals', 'Coimbatore Medical College',
         
         // Suburban Areas
-        'Saravanampatty', 'Ondipudur', 'Kuniyamuthur', 'Vilankurichi'
+        'Saravanampatty', 'Ondipudur', 'Kuniyamuthur', 'Vilankurichi',
+        
+        // ADDITIONAL 70 LOCATIONS FOR COMPREHENSIVE COVERAGE
+        
+        // Extended Commercial & Business Areas
+        'Sitra', 'Ramnagar', 'Tatabad', 'Pappanaickenpalayam', 'Ramanathapuram',
+        'Selvapuram', 'Ganapathy', 'Koundampalayam', 'Kuniamuthur', 'Podanur Junction',
+        
+        // Extended IT & Tech Areas
+        'Keeranatham', 'Chinnavedampatti', 'Kovaipudur', 'Thondamuthur', 'Narasimhanaickenpalayam',
+        'Vellalore', 'Madampatti', 'Idikarai', 'Chettipalayam', 'Kinathukadavu',
+        
+        // Extended Educational Areas
+        'Anna University Coimbatore', 'Amrita University', 'Karunya University', 'PSGR Krishnammal College',
+        'SNS College of Technology', 'Karpagam University', 'Sri Krishna College of Engineering',
+        'Kumaraguru College of Technology', 'Dr. Mahalingam College of Engineering', 'Hindusthan College of Engineering',
+        
+        // Extended Residential Areas
+        'Hopes College Junction', 'Lakshmi Mills Junction', 'Flower Market Road', 'Vegetable Market Area',
+        'Textile Market Junction', 'Oppanakara Street', 'Nehru Street Junction', 'Big Bazaar Street',
+        'Diwan Bahadur Road', 'Bharathi Park Road',
+        
+        // Extended Industrial Areas
+        'SIDCO Industrial Estate', 'Coimbatore Export Promotion Industrial Park', 'Kurichi Industrial Area',
+        'Kalapatti Industrial Estate', 'Perur Industrial Area', 'Neelambur Industrial Park',
+        'Malumichampatti Industrial Area', 'Ondipudur Industrial Estate', 'Sulur Industrial Park', 'Annur Industrial Area',
+        
+        // Extended Transport & Highway Junctions
+        'Singanallur Bus Stand', 'Peelamedu Bus Stand', 'Vadavalli Bus Stop', 'Thudiyalur Bus Stop',
+        'Saravanampatti Bus Stop', 'Kuniyamuthur Bus Stop', 'Podanur Railway Station', 'Irugur Railway Station',
+        'Periyanayakkanpalayam Railway Station', 'Coimbatore North Railway Station',
+        
+        // Extended Major Road Intersections
+        'Avinashi Road - Trichy Road Junction', 'Pollachi Road - Sathy Road Junction', 'Mettupalayam Road - Avinashi Road Junction',
+        'Salem Road - Trichy Road Junction', 'Palakkad Road - Pollachi Road Junction', 'Sathy Road - Mettupalayam Road Junction',
+        'Trichy Road - Salem Road Junction', 'Avinashi Road - Salem Road Junction', 'Pollachi Road - Palakkad Road Junction',
+        'Mettupalayam Road - Sathy Road Junction'
       ];
       
       setLocations(comprehensiveLocations);

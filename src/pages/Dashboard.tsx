@@ -127,6 +127,92 @@ const Dashboard = () => {
       { name: 'Ondipudur', baseVehicles: 110, baseSpeed: 48 },
       { name: 'Kuniyamuthur', baseVehicles: 130, baseSpeed: 43 },
       { name: 'Vilankurichi', baseVehicles: 125, baseSpeed: 44 },
+      
+      // ADDITIONAL 70 LOCATIONS FOR COMPREHENSIVE COVERAGE
+      
+      // Extended Commercial & Business Areas
+      { name: 'Sitra', baseVehicles: 180, baseSpeed: 32 },
+      { name: 'Ramnagar', baseVehicles: 160, baseSpeed: 35 },
+      { name: 'Tatabad', baseVehicles: 220, baseSpeed: 28 },
+      { name: 'Pappanaickenpalayam', baseVehicles: 170, baseSpeed: 33 },
+      { name: 'Ramanathapuram', baseVehicles: 150, baseSpeed: 36 },
+      { name: 'Selvapuram', baseVehicles: 130, baseSpeed: 40 },
+      { name: 'Ganapathy', baseVehicles: 160, baseSpeed: 35 },
+      { name: 'Koundampalayam', baseVehicles: 120, baseSpeed: 42 },
+      { name: 'Kuniamuthur', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Podanur Junction', baseVehicles: 230, baseSpeed: 26 },
+      
+      // Extended IT & Tech Areas
+      { name: 'Keeranatham', baseVehicles: 170, baseSpeed: 34 },
+      { name: 'Chinnavedampatti', baseVehicles: 110, baseSpeed: 45 },
+      { name: 'Kovaipudur', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Thondamuthur', baseVehicles: 120, baseSpeed: 42 },
+      { name: 'Narasimhanaickenpalayam', baseVehicles: 100, baseSpeed: 48 },
+      { name: 'Vellalore', baseVehicles: 90, baseSpeed: 50 },
+      { name: 'Madampatti', baseVehicles: 80, baseSpeed: 52 },
+      { name: 'Idikarai', baseVehicles: 70, baseSpeed: 55 },
+      { name: 'Chettipalayam', baseVehicles: 80, baseSpeed: 52 },
+      { name: 'Kinathukadavu', baseVehicles: 60, baseSpeed: 58 },
+      
+      // Extended Educational Areas
+      { name: 'Anna University Coimbatore', baseVehicles: 160, baseSpeed: 35 },
+      { name: 'Amrita University', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Karunya University', baseVehicles: 120, baseSpeed: 42 },
+      { name: 'PSGR Krishnammal College', baseVehicles: 130, baseSpeed: 40 },
+      { name: 'SNS College of Technology', baseVehicles: 110, baseSpeed: 45 },
+      { name: 'Karpagam University', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Sri Krishna College of Engineering', baseVehicles: 100, baseSpeed: 48 },
+      { name: 'Kumaraguru College of Technology', baseVehicles: 170, baseSpeed: 34 },
+      { name: 'Dr. Mahalingam College of Engineering', baseVehicles: 90, baseSpeed: 50 },
+      { name: 'Hindusthan College of Engineering', baseVehicles: 120, baseSpeed: 42 },
+      
+      // Extended Residential Areas
+      { name: 'Hopes College Junction', baseVehicles: 180, baseSpeed: 32 },
+      { name: 'Lakshmi Mills Junction', baseVehicles: 250, baseSpeed: 25 },
+      { name: 'Flower Market Road', baseVehicles: 220, baseSpeed: 28 },
+      { name: 'Vegetable Market Area', baseVehicles: 230, baseSpeed: 26 },
+      { name: 'Textile Market Junction', baseVehicles: 170, baseSpeed: 33 },
+      { name: 'Oppanakara Street', baseVehicles: 160, baseSpeed: 35 },
+      { name: 'Nehru Street Junction', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Big Bazaar Street', baseVehicles: 200, baseSpeed: 30 },
+      { name: 'Diwan Bahadur Road', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Bharathi Park Road', baseVehicles: 120, baseSpeed: 42 },
+      
+      // Extended Industrial Areas
+      { name: 'SIDCO Industrial Estate', baseVehicles: 170, baseSpeed: 34 },
+      { name: 'Coimbatore Export Promotion Industrial Park', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Kurichi Industrial Area', baseVehicles: 220, baseSpeed: 28 },
+      { name: 'Kalapatti Industrial Estate', baseVehicles: 160, baseSpeed: 35 },
+      { name: 'Perur Industrial Area', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Neelambur Industrial Park', baseVehicles: 130, baseSpeed: 40 },
+      { name: 'Malumichampatti Industrial Area', baseVehicles: 110, baseSpeed: 45 },
+      { name: 'Ondipudur Industrial Estate', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Sulur Industrial Park', baseVehicles: 100, baseSpeed: 48 },
+      { name: 'Annur Industrial Area', baseVehicles: 90, baseSpeed: 50 },
+      
+      // Extended Transport & Highway Junctions
+      { name: 'Singanallur Bus Stand', baseVehicles: 260, baseSpeed: 24 },
+      { name: 'Peelamedu Bus Stand', baseVehicles: 180, baseSpeed: 32 },
+      { name: 'Vadavalli Bus Stop', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Thudiyalur Bus Stop', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Saravanampatti Bus Stop', baseVehicles: 130, baseSpeed: 40 },
+      { name: 'Kuniyamuthur Bus Stop', baseVehicles: 120, baseSpeed: 42 },
+      { name: 'Podanur Railway Station', baseVehicles: 170, baseSpeed: 34 },
+      { name: 'Irugur Railway Station', baseVehicles: 110, baseSpeed: 45 },
+      { name: 'Periyanayakkanpalayam Railway Station', baseVehicles: 90, baseSpeed: 50 },
+      { name: 'Coimbatore North Railway Station', baseVehicles: 160, baseSpeed: 35 },
+      
+      // Extended Major Road Intersections
+      { name: 'Avinashi Road - Trichy Road Junction', baseVehicles: 280, baseSpeed: 22 },
+      { name: 'Pollachi Road - Sathy Road Junction', baseVehicles: 170, baseSpeed: 33 },
+      { name: 'Mettupalayam Road - Avinashi Road Junction', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Salem Road - Trichy Road Junction', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Palakkad Road - Pollachi Road Junction', baseVehicles: 130, baseSpeed: 40 },
+      { name: 'Sathy Road - Mettupalayam Road Junction', baseVehicles: 120, baseSpeed: 42 },
+      { name: 'Trichy Road - Salem Road Junction', baseVehicles: 160, baseSpeed: 35 },
+      { name: 'Avinashi Road - Salem Road Junction', baseVehicles: 150, baseSpeed: 37 },
+      { name: 'Pollachi Road - Palakkad Road Junction', baseVehicles: 140, baseSpeed: 38 },
+      { name: 'Mettupalayam Road - Sathy Road Junction', baseVehicles: 110, baseSpeed: 45 },
     ];
     
     const sampleData: TrafficData[] = allLocations.map(location => {

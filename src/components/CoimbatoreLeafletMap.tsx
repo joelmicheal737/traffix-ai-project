@@ -134,6 +134,92 @@ const CoimbatoreLeafletMap = ({
     { location: 'Udumalaipettai', lat: 10.5833, lng: 77.2500, congestionLevel: 'low', vehicleCount: 76 },
     { location: 'Palladam', lat: 11.1500, lng: 77.2833, congestionLevel: 'low', vehicleCount: 89 },
     { location: 'Tirupur Road', lat: 11.1000, lng: 77.3500, congestionLevel: 'medium', vehicleCount: 134 },
+    
+    // ADDITIONAL 70 LOCATIONS FOR COMPREHENSIVE COVERAGE
+    
+    // Extended Commercial & Business Areas
+    { location: 'Sitra', lat: 11.0100, lng: 76.9700, congestionLevel: 'medium', vehicleCount: 198 },
+    { location: 'Ramnagar', lat: 11.0200, lng: 76.9800, congestionLevel: 'medium', vehicleCount: 176 },
+    { location: 'Tatabad', lat: 11.0300, lng: 76.9900, congestionLevel: 'high', vehicleCount: 234 },
+    { location: 'Pappanaickenpalayam', lat: 11.0400, lng: 77.0100, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Ramanathapuram', lat: 11.0150, lng: 76.9750, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Selvapuram', lat: 11.0250, lng: 76.9850, congestionLevel: 'low', vehicleCount: 145 },
+    { location: 'Ganapathy', lat: 11.0350, lng: 76.9950, congestionLevel: 'medium', vehicleCount: 178 },
+    { location: 'Koundampalayam', lat: 11.0450, lng: 77.0050, congestionLevel: 'low', vehicleCount: 134 },
+    { location: 'Kuniamuthur', lat: 10.9900, lng: 76.9600, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Podanur Junction', lat: 10.9850, lng: 76.9850, congestionLevel: 'high', vehicleCount: 245 },
+    
+    // Extended IT & Tech Areas
+    { location: 'Keeranatham', lat: 11.0600, lng: 77.0400, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Chinnavedampatti', lat: 11.0700, lng: 77.0500, congestionLevel: 'low', vehicleCount: 123 },
+    { location: 'Kovaipudur', lat: 11.0800, lng: 77.0600, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Thondamuthur', lat: 11.0900, lng: 77.0700, congestionLevel: 'low', vehicleCount: 134 },
+    { location: 'Narasimhanaickenpalayam', lat: 11.1000, lng: 77.0800, congestionLevel: 'low', vehicleCount: 112 },
+    { location: 'Vellalore', lat: 11.1100, lng: 77.0900, congestionLevel: 'low', vehicleCount: 98 },
+    { location: 'Madampatti', lat: 11.1200, lng: 77.1000, congestionLevel: 'low', vehicleCount: 87 },
+    { location: 'Idikarai', lat: 11.1300, lng: 77.1100, congestionLevel: 'low', vehicleCount: 76 },
+    { location: 'Chettipalayam', lat: 11.1400, lng: 77.1200, congestionLevel: 'low', vehicleCount: 89 },
+    { location: 'Kinathukadavu', lat: 10.8000, lng: 76.9000, congestionLevel: 'low', vehicleCount: 65 },
+    
+    // Extended Educational Areas
+    { location: 'Anna University Coimbatore', lat: 11.0180, lng: 76.9300, congestionLevel: 'medium', vehicleCount: 178 },
+    { location: 'Amrita University', lat: 10.9000, lng: 76.9000, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Karunya University', lat: 10.9333, lng: 76.7333, congestionLevel: 'low', vehicleCount: 134 },
+    { location: 'PSGR Krishnammal College', lat: 11.0200, lng: 76.9250, congestionLevel: 'medium', vehicleCount: 145 },
+    { location: 'SNS College of Technology', lat: 11.0500, lng: 77.1000, congestionLevel: 'low', vehicleCount: 123 },
+    { location: 'Karpagam University', lat: 11.0167, lng: 76.9000, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Sri Krishna College of Engineering', lat: 11.1000, lng: 77.0500, congestionLevel: 'low', vehicleCount: 112 },
+    { location: 'Kumaraguru College of Technology', lat: 11.0700, lng: 76.9200, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Dr. Mahalingam College of Engineering', lat: 10.9500, lng: 77.4833, congestionLevel: 'low', vehicleCount: 98 },
+    { location: 'Hindusthan College of Engineering', lat: 11.0333, lng: 76.9167, congestionLevel: 'low', vehicleCount: 134 },
+    
+    // Extended Residential Areas
+    { location: 'Hopes College Junction', lat: 11.0180, lng: 76.9520, congestionLevel: 'medium', vehicleCount: 198 },
+    { location: 'Lakshmi Mills Junction', lat: 11.0020, lng: 76.9680, congestionLevel: 'high', vehicleCount: 267 },
+    { location: 'Flower Market Road', lat: 11.0030, lng: 76.9650, congestionLevel: 'high', vehicleCount: 234 },
+    { location: 'Vegetable Market Area', lat: 11.0015, lng: 76.9660, congestionLevel: 'high', vehicleCount: 245 },
+    { location: 'Textile Market Junction', lat: 11.0035, lng: 76.9640, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Oppanakara Street', lat: 11.0025, lng: 76.9655, congestionLevel: 'medium', vehicleCount: 176 },
+    { location: 'Nehru Street Junction', lat: 11.0040, lng: 76.9635, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Big Bazaar Street', lat: 11.0030, lng: 76.9645, congestionLevel: 'high', vehicleCount: 212 },
+    { location: 'Diwan Bahadur Road', lat: 11.0050, lng: 76.9625, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Bharathi Park Road', lat: 11.0060, lng: 76.9615, congestionLevel: 'low', vehicleCount: 134 },
+    
+    // Extended Industrial Areas
+    { location: 'SIDCO Industrial Estate', lat: 11.0600, lng: 77.0200, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Coimbatore Export Promotion Industrial Park', lat: 11.0700, lng: 77.0300, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Kurichi Industrial Area', lat: 11.0200, lng: 77.0550, congestionLevel: 'high', vehicleCount: 234 },
+    { location: 'Kalapatti Industrial Estate', lat: 11.0200, lng: 76.8900, congestionLevel: 'medium', vehicleCount: 178 },
+    { location: 'Perur Industrial Area', lat: 11.0400, lng: 76.8900, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Neelambur Industrial Park', lat: 11.0550, lng: 77.0700, congestionLevel: 'medium', vehicleCount: 145 },
+    { location: 'Malumichampatti Industrial Area', lat: 11.0900, lng: 76.9200, congestionLevel: 'low', vehicleCount: 123 },
+    { location: 'Ondipudur Industrial Estate', lat: 11.0200, lng: 77.0900, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Sulur Industrial Park', lat: 11.0400, lng: 77.1200, congestionLevel: 'low', vehicleCount: 112 },
+    { location: 'Annur Industrial Area', lat: 11.2400, lng: 77.1100, congestionLevel: 'low', vehicleCount: 98 },
+    
+    // Extended Transport & Highway Junctions
+    { location: 'Singanallur Bus Stand', lat: 11.0530, lng: 77.0350, congestionLevel: 'high', vehicleCount: 278 },
+    { location: 'Peelamedu Bus Stand', lat: 11.0310, lng: 77.0280, congestionLevel: 'medium', vehicleCount: 198 },
+    { location: 'Vadavalli Bus Stop', lat: 11.0720, lng: 76.9060, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Thudiyalur Bus Stop', lat: 11.0720, lng: 76.9390, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Saravanampatti Bus Stop', lat: 11.0720, lng: 77.0060, congestionLevel: 'medium', vehicleCount: 145 },
+    { location: 'Kuniyamuthur Bus Stop', lat: 10.9850, lng: 76.9520, congestionLevel: 'medium', vehicleCount: 134 },
+    { location: 'Podanur Railway Station', lat: 10.9850, lng: 76.9870, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Irugur Railway Station', lat: 11.0167, lng: 76.8833, congestionLevel: 'low', vehicleCount: 123 },
+    { location: 'Periyanayakkanpalayam Railway Station', lat: 11.1500, lng: 76.9500, congestionLevel: 'low', vehicleCount: 98 },
+    { location: 'Coimbatore North Railway Station', lat: 11.0300, lng: 76.9700, congestionLevel: 'medium', vehicleCount: 178 },
+    
+    // Extended Major Road Intersections
+    { location: 'Avinashi Road - Trichy Road Junction', lat: 11.0400, lng: 77.0200, congestionLevel: 'high', vehicleCount: 298 },
+    { location: 'Pollachi Road - Sathy Road Junction', lat: 10.9900, lng: 76.9200, congestionLevel: 'medium', vehicleCount: 189 },
+    { location: 'Mettupalayam Road - Avinashi Road Junction', lat: 11.0600, lng: 76.9300, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Salem Road - Trichy Road Junction', lat: 11.0900, lng: 77.0300, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Palakkad Road - Pollachi Road Junction', lat: 10.9700, lng: 76.9400, congestionLevel: 'medium', vehicleCount: 145 },
+    { location: 'Sathy Road - Mettupalayam Road Junction', lat: 11.0800, lng: 76.9100, congestionLevel: 'low', vehicleCount: 134 },
+    { location: 'Trichy Road - Salem Road Junction', lat: 11.0800, lng: 77.0400, congestionLevel: 'medium', vehicleCount: 178 },
+    { location: 'Avinashi Road - Salem Road Junction', lat: 11.0500, lng: 77.0350, congestionLevel: 'medium', vehicleCount: 167 },
+    { location: 'Pollachi Road - Palakkad Road Junction', lat: 10.9800, lng: 76.9300, congestionLevel: 'medium', vehicleCount: 156 },
+    { location: 'Mettupalayam Road - Sathy Road Junction', lat: 11.0700, lng: 76.9200, congestionLevel: 'low', vehicleCount: 123 },
   ];
 
   const getCongestionColor = (congestionLevel: string) => {
