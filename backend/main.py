@@ -37,11 +37,152 @@ cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=cors_origins + ["*"],  # Allow configured origins plus all for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add startup event to populate database with sample data
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database with comprehensive sample data"""
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        # Check if we already have data
+        cursor.execute("SELECT COUNT(*) FROM traffic_data")
+        count = cursor.fetchone()[0]
+        
+        if count == 0:
+            logger.info("Populating database with comprehensive sample data...")
+            
+            # Comprehensive Coimbatore locations
+            locations_data = [
+                # Major Commercial Areas
+                ('Gandhipuram', 280, 25, 'high'),
+                ('RS Puram', 220, 30, 'medium'),
+                ('Cross Cut Road', 240, 28, 'high'),
+                ('Town Hall', 260, 26, 'high'),
+                ('Race Course', 200, 32, 'medium'),
+                
+                # IT Corridor & Tech Areas
+                ('Peelamedu', 180, 35, 'medium'),
+                ('Tidel Park', 320, 22, 'very_high'),
+                ('ELCOT IT Park', 190, 34, 'medium'),
+                ('Coimbatore IT Park', 160, 38, 'low'),
+                
+                # Educational & Residential Areas
+                ('Saibaba Colony', 150, 40, 'low'),
+                ('Vadavalli', 170, 36, 'medium'),
+                ('Thudiyalur', 140, 42, 'low'),
+                ('PSG College Area', 200, 32, 'medium'),
+                
+                # Industrial Areas
+                ('Singanallur', 210, 30, 'medium'),
+                ('Kurichi', 250, 28, 'high'),
+                ('Kalapatti', 180, 35, 'medium'),
+                ('Neelambur', 160, 38, 'low'),
+                
+                # Transport Hubs
+                ('Ukkadam Bus Stand', 380, 18, 'very_high'),
+                ('Railway Station', 350, 20, 'very_high'),
+                ('Gandhipuram Bus Stand', 340, 19, 'very_high'),
+                
+                # Major Roads
+                ('Avinashi Road', 230, 29, 'high'),
+                ('Pollachi Road', 190, 33, 'medium'),
+                ('Mettupalayam Road', 170, 36, 'medium'),
+                ('Trichy Road', 180, 35, 'medium'),
+                
+                # Shopping Areas
+                ('Brookefields Mall', 240, 27, 'high'),
+                ('Fun Mall', 200, 31, 'medium'),
+                ('Prozone Mall', 180, 34, 'medium'),
+                
+                # Hospitals
+                ('KMCH Hospital', 190, 33, 'medium'),
+                ('PSG Hospitals', 170, 36, 'medium'),
+                ('Coimbatore Medical College', 160, 38, 'low'),
+                
+                # Suburban Areas
+                ('Saravanampatty', 120, 45, 'low'),
+                ('Ondipudur', 110, 48, 'low'),
+                ('Kuniyamuthur', 130, 43, 'low'),
+                ('Vilankurichi', 125, 44, 'low'),
+            ]
+            
+            # Generate data for the last 7 days with hourly intervals
+            from datetime import datetime, timedelta
+            import random
+            
+            base_time = datetime.now() - timedelta(days=7)
+            
+            for location, base_vehicles, base_speed, base_congestion in locations_data:
+                for day in range(7):
+                    for hour in range(24):
+                        timestamp = base_time + timedelta(days=day, hours=hour)
+                        
+                        # Apply realistic variations based on time
+                        is_rush_hour = hour in [7, 8, 9, 17, 18, 19]
+                        is_weekend = timestamp.weekday() >= 5
+                        
+                        vehicle_multiplier = 1.0
+                        speed_multiplier = 1.0
+                        
+                        if is_rush_hour:
+                            vehicle_multiplier = 1.4 if not is_weekend else 1.1
+                            speed_multiplier = 0.7 if not is_weekend else 0.9
+                        elif hour >= 22 or hour <= 6:
+                            vehicle_multiplier = 0.4
+                            speed_multiplier = 1.3
+                        
+                        # Add randomness
+                        random_factor = 0.8 + random.random() * 0.4
+                        
+                        vehicle_count = int(base_vehicles * vehicle_multiplier * random_factor)
+                        avg_speed = round(base_speed * speed_multiplier * random_factor, 1)
+                        
+                        # Determine congestion based on vehicles and speed
+                        if vehicle_count > 300 or avg_speed < 20:
+                            congestion = 'very_high'
+                        elif vehicle_count > 220 or avg_speed < 28:
+                            congestion = 'high'
+                        elif vehicle_count > 150 or avg_speed < 35:
+                            congestion = 'medium'
+                        else:
+                            congestion = 'low'
+                        
+                        weather = random.choice(['clear', 'cloudy', 'partly_cloudy'])
+                        day_name = timestamp.strftime('%A').lower()
+                        
+                        cursor.execute("""
+                            INSERT INTO traffic_data 
+                            (timestamp, location, vehicle_count, avg_speed, congestion_level, weather, day_of_week, hour, is_weekend, temperature, humidity, visibility)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (
+                            timestamp.isoformat(),
+                            location,
+                            vehicle_count,
+                            avg_speed,
+                            congestion,
+                            weather,
+                            day_name,
+                            hour,
+                            is_weekend,
+                            25.0 + random.uniform(-5, 10),  # Temperature
+                            60.0 + random.uniform(-20, 30),  # Humidity
+                            10.0 + random.uniform(-3, 5)    # Visibility
+                        ))
+            
+            conn.commit()
+            logger.info(f"Populated database with {len(locations_data) * 7 * 24} traffic records")
+        
+        conn.close()
+        
+    except Exception as e:
+        logger.error(f"Error during startup: {str(e)}")
 
 # Database setup
 DATABASE_PATH = "traffix.db"
