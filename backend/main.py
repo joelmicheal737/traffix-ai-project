@@ -7,23 +7,43 @@ from datetime import datetime, timedelta
 import sqlite3
 import json
 import os
+import sys
 from typing import List, Optional
 import aiofiles
 from pydantic import BaseModel
 import cv2
-from ultralytics import YOLO
 import tempfile
-from prophet import Prophet
 import warnings
-import tensorflow as tf
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-import joblib
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import logging
 
 warnings.filterwarnings('ignore')
+
+# Optional imports with fallbacks
+try:
+    from ultralytics import YOLO
+    YOLO_AVAILABLE = True
+except ImportError:
+    YOLO_AVAILABLE = False
+    logger.warning("YOLOv8 not available. Video analysis will use mock data.")
+
+try:
+    from prophet import Prophet
+    PROPHET_AVAILABLE = True
+except ImportError:
+    PROPHET_AVAILABLE = False
+    logger.warning("Prophet not available. Using basic predictions.")
+
+try:
+    import tensorflow as tf
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.metrics import mean_absolute_error, mean_squared_error
+    import joblib
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+    logger.warning("ML libraries not available. Using basic predictions.")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

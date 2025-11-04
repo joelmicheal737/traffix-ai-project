@@ -43,25 +43,41 @@ def setup_environment():
 
 def check_dependencies():
     """Check if all required dependencies are installed"""
-    required_packages = [
-        'fastapi', 'uvicorn', 'tensorflow', 'pandas', 'numpy',
-        'scikit-learn', 'prophet', 'opencv-python', 'ultralytics'
+    core_packages = [
+        'fastapi', 'uvicorn', 'pandas', 'numpy'
+    ]
+    
+    optional_packages = [
+        'tensorflow', 'scikit-learn', 'prophet', 'opencv-python', 'ultralytics'
     ]
     
     missing_packages = []
     
-    for package in required_packages:
+    # Check core packages
+    for package in core_packages:
         try:
             __import__(package.replace('-', '_'))
         except ImportError:
             missing_packages.append(package)
     
     if missing_packages:
-        logger.error(f"Missing required packages: {missing_packages}")
+        logger.error(f"Missing core packages: {missing_packages}")
         logger.error("Please install missing packages using: pip install -r requirements.txt")
         sys.exit(1)
     
-    logger.info("All dependencies are installed")
+    # Check optional packages
+    missing_optional = []
+    for package in optional_packages:
+        try:
+            __import__(package.replace('-', '_'))
+        except ImportError:
+            missing_optional.append(package)
+    
+    if missing_optional:
+        logger.warning(f"Optional packages not installed: {missing_optional}")
+        logger.warning("Some features may be limited. Install with: pip install tensorflow prophet ultralytics opencv-python")
+    
+    logger.info("Core dependencies are installed")
 
 def main():
     """Main function to start the server"""
