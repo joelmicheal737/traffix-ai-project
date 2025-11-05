@@ -196,16 +196,17 @@ const CoimbatoreLeafletMap = ({
       html: `
         <div style="
           background-color: ${color};
-          width: 16px;
-          height: 16px;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
-          border: 2px solid white;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+          border: 3px solid white;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+          position: relative;
         "></div>
       `,
-      iconSize: [16, 16],
-      iconAnchor: [8, 8],
-      popupAnchor: [0, -8],
+      iconSize: [20, 20],
+      iconAnchor: [10, 10],
+      popupAnchor: [0, -10],
     });
   };
 
@@ -284,8 +285,10 @@ const CoimbatoreLeafletMap = ({
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19,
-      tileSize: 256,
-      zoomOffset: 0,
+      tileSize: 512,
+      zoomOffset: -1,
+      detectRetina: true,
+      crossOrigin: true,
     }).addTo(map);
 
     mapInstanceRef.current = map;
@@ -325,28 +328,28 @@ const CoimbatoreLeafletMap = ({
       
       {/* Legend */}
       {showTrafficMarkers && (
-        <div className="absolute bottom-4 right-4 z-[1000] bg-white p-3 rounded-lg shadow-lg border">
-          <h4 className="font-bold text-xs text-gray-900 mb-2">🚦 Traffic Status</h4>
-          <div className="space-y-1">
+        <div className="absolute bottom-4 right-4 z-[1000] bg-white p-4 rounded-xl shadow-xl border-2 border-gray-200">
+          <h4 className="font-bold text-sm text-gray-900 mb-3 text-center">🚦 Traffic Status</h4>
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <span className="text-xs font-medium">Low Congestion</span>
+              <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow-sm"></div>
+              <span className="text-sm font-semibold text-gray-800">Low Congestion</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <span className="text-xs font-medium">Medium Traffic</span>
+              <div className="w-4 h-4 rounded-full bg-yellow-500 border-2 border-white shadow-sm"></div>
+              <span className="text-sm font-semibold text-gray-800">Medium Traffic</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <span className="text-xs font-medium">Heavy Traffic</span>
+              <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow-sm"></div>
+              <span className="text-sm font-semibold text-gray-800">Heavy Traffic</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-800"></div>
-              <span className="text-xs font-medium">Severe Congestion</span>
+              <div className="w-4 h-4 rounded-full bg-red-800 border-2 border-white shadow-sm"></div>
+              <span className="text-sm font-semibold text-gray-800">Severe Congestion</span>
             </div>
           </div>
-          <div className="mt-2 pt-2 border-t border-gray-200">
-            <div className="text-xs text-gray-600 space-y-1">
+          <div className="mt-3 pt-3 border-t border-gray-200">
+            <div className="text-xs text-gray-600 space-y-1 text-center">
               <div>🗺️ OpenStreetMap</div>
               <div>📍 {trafficData.length > 0 ? trafficData.length : coimbatoreLocations.length} Points</div>
             </div>
@@ -355,10 +358,10 @@ const CoimbatoreLeafletMap = ({
       )}
 
       {/* Info Panel */}
-      <div className="absolute top-4 left-4 z-[1000] bg-white p-3 rounded-lg shadow-lg border">
-        <h3 className="font-bold text-xs text-gray-900 mb-1">🏙️ Coimbatore Traffic</h3>
-        <p className="text-xs text-gray-600">Live Traffic Monitoring</p>
-        <div className="text-xs text-blue-600 mt-1">
+      <div className="absolute top-4 left-4 z-[1000] bg-white p-4 rounded-xl shadow-xl border-2 border-gray-200">
+        <h3 className="font-bold text-sm text-gray-900 mb-2">🏙️ Coimbatore Traffic</h3>
+        <p className="text-sm text-gray-600 mb-1">Live Traffic Monitoring</p>
+        <div className="text-sm text-blue-600 font-semibold">
           📊 {trafficData.length > 0 ? trafficData.length : coimbatoreLocations.length} locations
         </div>
       </div>

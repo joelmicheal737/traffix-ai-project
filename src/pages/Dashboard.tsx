@@ -445,52 +445,139 @@ const Dashboard = () => {
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Congestion Distribution</h3>
-            <ResponsiveContainer width="100%" height={300}>
+            <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Traffic Congestion Distribution</h3>
+            <ResponsiveContainer width="100%" height={350}>
               <PieChart>
                 <Pie
                   data={congestionData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
+                  innerRadius={60}
+                  outerRadius={120}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent, value }) => `${name}\n${value} locations\n${(percent * 100).toFixed(1)}%`}
+                  labelLine={false}
+                  fontSize={12}
+                  fontWeight="bold"
                 >
                   {congestionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={entry.color} stroke="#ffffff" strokeWidth={2} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip 
+                  formatter={(value, name) => [`${value} locations`, name]}
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
+            
+            {/* Enhanced Legend */}
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {congestionData.map((entry, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div 
+                      className="w-4 h-4 rounded-full mr-3 border-2 border-white shadow-sm"
+                      style={{ backgroundColor: entry.color }}
+                    ></div>
+                    <span className="font-semibold text-gray-800">{entry.name}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-lg" style={{ color: entry.color }}>
+                      {entry.value}
+                    </div>
+                    <div className="text-xs text-gray-500">locations</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Count by Location</h3>
-            <ResponsiveContainer width="100%" height={300}>
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Vehicle Count by Location</h3>
+            <ResponsiveContainer width="100%" height={400}>
               <BarChart data={vehicleCountData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="location" angle={-45} textAnchor="end" height={80} />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="vehicle_count" fill="#3B82F6" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis 
+                  dataKey="location" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={100}
+                  fontSize={11}
+                  fontWeight="bold"
+                />
+                <YAxis 
+                  fontSize={12}
+                  fontWeight="bold"
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} vehicles`, 'Vehicle Count']}
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    border: '2px solid #3B82F6',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}
+                />
+                <Bar 
+                  dataKey="vehicle_count" 
+                  fill="#3B82F6" 
+                  stroke="#1E40AF"
+                  strokeWidth={1}
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Average Speed by Location</h3>
-            <ResponsiveContainer width="100%" height={300}>
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Average Speed by Location</h3>
+            <ResponsiveContainer width="100%" height={400}>
               <LineChart data={speedData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="location" angle={-45} textAnchor="end" height={80} />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="avg_speed" stroke="#10B981" strokeWidth={2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis 
+                  dataKey="location" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={100}
+                  fontSize={11}
+                  fontWeight="bold"
+                />
+                <YAxis 
+                  fontSize={12}
+                  fontWeight="bold"
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} km/h`, 'Average Speed']}
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    border: '2px solid #10B981',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="avg_speed" 
+                  stroke="#10B981" 
+                  strokeWidth={3}
+                  dot={{ fill: '#10B981', strokeWidth: 2, r: 5 }}
+                  activeDot={{ r: 7, stroke: '#10B981', strokeWidth: 2, fill: '#ffffff' }}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
