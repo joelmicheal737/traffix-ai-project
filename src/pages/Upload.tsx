@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Upload as UploadIcon, FileText, Video, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const Upload = () => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -391,6 +392,90 @@ const Upload = () => {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Traffic Congestion Distribution */}
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Traffic Congestion Distribution</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Pie Chart */}
+            <div className="flex justify-center">
+              <div style={{ width: '300px', height: '300px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Low', value: 25, color: '#10B981' },
+                        { name: 'Medium', value: 35, color: '#F59E0B' },
+                        { name: 'High', value: 28, color: '#EF4444' },
+                        { name: 'Very High', value: 12, color: '#7C2D12' }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={120}
+                      dataKey="value"
+                      label={({ name, percent, value }) => `${name}\n${value} locations\n${(percent * 100).toFixed(1)}%`}
+                      labelLine={false}
+                      fontSize={12}
+                      fontWeight="bold"
+                    >
+                      {[
+                        { name: 'Low', value: 25, color: '#10B981' },
+                        { name: 'Medium', value: 35, color: '#F59E0B' },
+                        { name: 'High', value: 28, color: '#EF4444' },
+                        { name: 'Very High', value: 12, color: '#7C2D12' }
+                      ].map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} stroke="#ffffff" strokeWidth={2} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value, name) => [`${value} locations`, name]}
+                      contentStyle={{
+                        backgroundColor: '#ffffff',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        fontSize: '14px',
+                        fontWeight: 'bold'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            
+            {/* Enhanced Legend */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-lg text-gray-900 mb-4">Traffic Status Overview</h4>
+              {[
+                { name: 'Low', value: 25, color: '#10B981', description: 'Smooth traffic flow' },
+                { name: 'Medium', value: 35, color: '#F59E0B', description: 'Moderate congestion' },
+                { name: 'High', value: 28, color: '#EF4444', description: 'Heavy traffic' },
+                { name: 'Very High', value: 12, color: '#7C2D12', description: 'Severe congestion' }
+              ].map((entry, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4" style={{ borderLeftColor: entry.color }}>
+                  <div className="flex items-center">
+                    <div 
+                      className="w-5 h-5 rounded-full mr-4 border-2 border-white shadow-sm"
+                      style={{ backgroundColor: entry.color }}
+                    ></div>
+                    <div>
+                      <span className="font-semibold text-gray-800 text-lg">{entry.name}</span>
+                      <p className="text-sm text-gray-600">{entry.description}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-2xl" style={{ color: entry.color }}>
+                      {entry.value}
+                    </div>
+                    <div className="text-sm text-gray-500">locations</div>
+                    <div className="text-xs text-gray-400">{((entry.value / 100) * 100).toFixed(0)}%</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

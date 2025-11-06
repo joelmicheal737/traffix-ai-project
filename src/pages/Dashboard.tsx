@@ -434,8 +434,8 @@ const Dashboard = () => {
         </div>
 
         {/* Map and Controls */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-          <div className="lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Coimbatore Traffic Map</h2>
             <CoimbatoreLeafletMap 
               height="500px" 
@@ -444,59 +444,82 @@ const Dashboard = () => {
             />
           </div>
           
+          {/* Live Traffic Info Panel */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Traffic Congestion Distribution</h3>
-            <ResponsiveContainer width="100%" height={350}>
-              <PieChart>
-                <Pie
-                  data={congestionData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  dataKey="value"
-                  label={({ name, percent, value }) => `${name}\n${value} locations\n${(percent * 100).toFixed(1)}%`}
-                  labelLine={false}
-                  fontSize={12}
-                  fontWeight="bold"
-                >
-                  {congestionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} stroke="#ffffff" strokeWidth={2} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value, name) => [`${value} locations`, name]}
-                  contentStyle={{
-                    backgroundColor: '#ffffff',
-                    border: '2px solid #e5e7eb',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                    fontSize: '14px',
-                    fontWeight: 'bold'
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            
-            {/* Enhanced Legend */}
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              {congestionData.map((entry, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="text-2xl">🏙️</div>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Coimbatore Traffic</h3>
+              <p className="text-sm text-gray-600 mb-1">Live Traffic Monitoring</p>
+              <div className="text-lg text-blue-600 font-bold">
+                📊 {trafficData.length} active locations
+              </div>
+            </div>
+
+            {/* Traffic Status Legend */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-sm text-gray-900 mb-3 text-center">🚦 Traffic Status</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                   <div className="flex items-center">
-                    <div 
-                      className="w-4 h-4 rounded-full mr-3 border-2 border-white shadow-sm"
-                      style={{ backgroundColor: entry.color }}
-                    ></div>
-                    <span className="font-semibold text-gray-800">{entry.name}</span>
+                    <div className="w-4 h-4 rounded-full bg-green-500 mr-3 border-2 border-white shadow-sm"></div>
+                    <span className="font-semibold text-gray-800">Low Congestion</span>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-lg" style={{ color: entry.color }}>
-                      {entry.value}
+                    <div className="font-bold text-lg text-green-600">
+                      {congestionData.find(item => item.name === 'Low')?.value || 0}
                     </div>
                     <div className="text-xs text-gray-500">locations</div>
                   </div>
                 </div>
-              ))}
+                
+                <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 rounded-full bg-yellow-500 mr-3 border-2 border-white shadow-sm"></div>
+                    <span className="font-semibold text-gray-800">Medium Traffic</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-lg text-yellow-600">
+                      {congestionData.find(item => item.name === 'Medium')?.value || 0}
+                    </div>
+                    <div className="text-xs text-gray-500">locations</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 rounded-full bg-red-500 mr-3 border-2 border-white shadow-sm"></div>
+                    <span className="font-semibold text-gray-800">Heavy Traffic</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-lg text-red-600">
+                      {congestionData.find(item => item.name === 'High')?.value || 0}
+                    </div>
+                    <div className="text-xs text-gray-500">locations</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between p-3 bg-red-100 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 rounded-full bg-red-800 mr-3 border-2 border-white shadow-sm"></div>
+                    <span className="font-semibold text-gray-800">Severe Congestion</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-lg text-red-800">
+                      {congestionData.find(item => item.name === 'Very High')?.value || 0}
+                    </div>
+                    <div className="text-xs text-gray-500">locations</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+                <div className="text-xs text-gray-600 space-y-1">
+                  <div>🗺️ OpenStreetMap</div>
+                  <div>🕒 Updated every 5 min</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
