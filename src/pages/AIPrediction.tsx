@@ -491,7 +491,7 @@ const AIPrediction = () => {
         {/* Model Information */}
         <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">About the AI Model</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Prophet Model</h4>
               <p className="text-sm text-gray-600">
@@ -506,6 +506,15 @@ const AIPrediction = () => {
                 <li>• Captures seasonal traffic patterns</li>
                 <li>• Provides confidence intervals</li>
                 <li>• Adapts to changing trends</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Data Processing</h4>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Real-time traffic analysis</li>
+                <li>• Historical pattern recognition</li>
+                <li>• Weather impact consideration</li>
+                <li>• Rush hour pattern detection</li>
               </ul>
             </div>
           </div>

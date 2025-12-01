@@ -256,7 +256,7 @@ const Upload = () => {
                 <div className="flex items-center mb-2">
                   <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
                   <h3 className="font-medium text-green-800">
-                    {csvResult.message?.includes('Demo') ? 'Upload Successful (Demo Mode)' : 'Upload Successful'}
+                    Upload Successful
                   </h3>
                 </div>
                 <div className="space-y-2 text-sm text-green-700">
