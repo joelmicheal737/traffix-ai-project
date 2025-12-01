@@ -453,7 +453,7 @@ const Dashboard = () => {
               <h3 className="text-xl font-bold text-gray-900 mb-2">Coimbatore Traffic</h3>
               <p className="text-sm text-gray-600 mb-1">Live Traffic Monitoring</p>
               <div className="text-lg text-blue-600 font-bold">
-                📊 {trafficData.length} active locations
+                📊 104 active locations
               </div>
             </div>
 
@@ -517,7 +517,7 @@ const Dashboard = () => {
               <div className="mt-4 pt-4 border-t border-gray-200 text-center">
                 <div className="text-xs text-gray-600 space-y-1">
                   <div>🗺️ OpenStreetMap</div>
-                  <div>🕒 Updated every 5 min</div>
+                  <div>📍 104 Monitor Points</div>
                 </div>
               </div>
             </div>
