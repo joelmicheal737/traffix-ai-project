@@ -266,9 +266,6 @@ const Upload = () => {
                   {csvResult.locations && csvResult.locations.length > 0 && (
                     <p><strong>Sample locations:</strong> {csvResult.locations.slice(0, 3).join(', ')}{csvResult.locations.length > 3 ? '...' : ''}</p>
                   )}
-                  {csvResult.message?.includes('Demo') && (
-                    <p className="text-blue-600 font-medium">ℹ️ Running in demo mode - backend not connected</p>
-                  )}
                 </div>
               </div>
             )}
@@ -482,12 +479,6 @@ const Upload = () => {
         {/* Sample Data Section */}
         <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Sample Data Format</h3>
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-              <strong>📝 Note:</strong> This application works in demo mode when the backend is not available. 
-              Upload functionality will simulate processing and show realistic results.
-            </p>
-          </div>
           <p className="text-gray-600 mb-4">
             Your CSV file should contain the following columns:
           </p>
