@@ -314,7 +314,7 @@ const Upload = () => {
                 <label htmlFor="video-upload" className="cursor-pointer">
                   <Video className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-600">Click to select video file</p>
-                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 100MB</p>
+                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 200MB</p>
                 </label>
               </div>
               
@@ -383,7 +383,7 @@ const Upload = () => {
                     <p className="text-sm text-red-700 font-medium">Analysis Failed</p>
                     <p className="text-sm text-red-600">{videoError}</p>
                     <p className="text-xs text-red-500 mt-1">
-                      💡 Tip: Supported formats are MP4, AVI, MOV. Max size: 100MB
+                      💡 Tip: Supported formats are MP4, AVI, MOV. Max size: 200MB
                     </p>
                   </div>
                 </div>

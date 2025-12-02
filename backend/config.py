@@ -33,7 +33,7 @@ class Settings:
     
     # Video Analysis
     VIDEO_CONFIDENCE_THRESHOLD: float = float(os.getenv("VIDEO_CONFIDENCE_THRESHOLD", "0.5"))
-    MAX_VIDEO_SIZE: int = int(os.getenv("MAX_VIDEO_SIZE", "500")) * 1024 * 1024  # 500MB
+    MAX_VIDEO_SIZE: int = int(os.getenv("MAX_VIDEO_SIZE", "200")) * 1024 * 1024  # 200MB
     
     # Performance
     MAX_WORKERS: int = int(os.getenv("MAX_WORKERS", "4"))
