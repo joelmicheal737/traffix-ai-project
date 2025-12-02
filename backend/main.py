@@ -17,23 +17,74 @@ import warnings
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import logging
+import sys
+import subprocess
 
 warnings.filterwarnings('ignore')
+
+# Function to install missing packages
+def install_package(package):
+    """Install a package using pip"""
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+# Check and install critical packages
+def ensure_dependencies():
+    """Ensure critical dependencies are installed"""
+    critical_packages = [
+        'opencv-python==4.8.1.78',
+        'scikit-learn==1.3.2',
+        'pandas==2.1.3',
+        'numpy==1.25.2'
+    ]
+    
+    for package in critical_packages:
+        try:
+            pkg_name = package.split('==')[0].replace('-', '_')
+            __import__(pkg_name)
+        except ImportError:
+            logger.warning(f"Installing missing package: {package}")
+            if install_package(package):
+                logger.info(f"Successfully installed {package}")
+            else:
+                logger.error(f"Failed to install {package}")
+
+# Ensure dependencies before importing optional libraries
+ensure_dependencies()
 
 # Optional imports with fallbacks
 try:
     from ultralytics import YOLO
     YOLO_AVAILABLE = True
+    logger.info("YOLOv8 is available")
 except ImportError:
     YOLO_AVAILABLE = False
-    logger.warning("YOLOv8 not available. Video analysis will use mock data.")
+    logger.warning("YOLOv8 not available. Installing ultralytics...")
+    if install_package('ultralytics==8.0.206'):
+        try:
+            from ultralytics import YOLO
+            YOLO_AVAILABLE = True
+            logger.info("YOLOv8 installed and available")
+        except ImportError:
+            logger.warning("YOLOv8 installation failed. Video analysis will use mock data.")
 
 try:
     from prophet import Prophet
     PROPHET_AVAILABLE = True
+    logger.info("Prophet is available")
 except ImportError:
     PROPHET_AVAILABLE = False
-    logger.warning("Prophet not available. Using basic predictions.")
+    logger.warning("Prophet not available. Installing prophet...")
+    if install_package('prophet==1.1.4'):
+        try:
+            from prophet import Prophet
+            PROPHET_AVAILABLE = True
+            logger.info("Prophet installed and available")
+        except ImportError:
+            logger.warning("Prophet installation failed. Using basic predictions.")
 
 try:
     import tensorflow as tf
@@ -41,9 +92,38 @@ try:
     from sklearn.metrics import mean_absolute_error, mean_squared_error
     import joblib
     ML_AVAILABLE = True
+    logger.info("TensorFlow and scikit-learn are available")
 except ImportError:
     ML_AVAILABLE = False
-    logger.warning("ML libraries not available. Using basic predictions.")
+    logger.warning("ML libraries not available. Installing required packages...")
+    packages_to_install = ['tensorflow==2.15.0', 'scikit-learn==1.3.2', 'joblib==1.3.2']
+    for pkg in packages_to_install:
+        install_package(pkg)
+    
+    try:
+        import tensorflow as tf
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.metrics import mean_absolute_error, mean_squared_error
+        import joblib
+        ML_AVAILABLE = True
+        logger.info("ML libraries installed and available")
+    except ImportError:
+        logger.warning("ML libraries installation failed. Using basic predictions.")
+
+try:
+    import cv2
+    CV2_AVAILABLE = True
+    logger.info("OpenCV is available")
+except ImportError:
+    CV2_AVAILABLE = False
+    logger.warning("OpenCV not available. Installing opencv-python...")
+    if install_package('opencv-python==4.8.1.78'):
+        try:
+            import cv2
+            CV2_AVAILABLE = True
+            logger.info("OpenCV installed and available")
+        except ImportError:
+            logger.warning("OpenCV installation failed.")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
