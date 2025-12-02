@@ -61,11 +61,40 @@ venv\Scripts\activate
 # On macOS/Linux:
 source venv/bin/activate
 
+# Install dependencies (recommended method)
+python install_dependencies.py
+
+# OR install manually
 # Install dependencies
 pip install -r requirements.txt
 
 # Start the server
 python run.py
+```
+
+### Troubleshooting Installation
+
+If you encounter issues with OpenCV or scikit-learn:
+
+```bash
+# Method 1: Use the dependency installer
+python install_dependencies.py
+
+# Method 2: Install problematic packages individually
+pip install opencv-python==4.8.1.78
+pip install scikit-learn==1.3.2
+pip install pandas==2.1.3
+pip install numpy==1.25.2
+
+# Method 3: For OpenCV issues on some systems
+pip install opencv-python-headless==4.8.1.78
+
+# Method 4: Complete fresh installation
+rm -rf venv
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
 ### Alternative Start Methods

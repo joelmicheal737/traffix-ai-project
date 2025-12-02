@@ -137,6 +137,18 @@ npm install
 
 #### Backend Issues
 
+**Missing Dependencies (OpenCV, scikit-learn):**
+```bash
+# Install missing packages individually
+pip install opencv-python==4.8.1.78
+pip install scikit-learn==1.3.2
+pip install pandas==2.1.3
+pip install numpy==1.25.2
+
+# Or reinstall all requirements
+pip install -r requirements.txt --force-reinstall
+```
+
 **Port 8000 already in use:**
 ```bash
 # Kill process using port 8000
@@ -169,6 +181,23 @@ source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
+**OpenCV Issues:**
+```bash
+# If opencv-python doesn't work, try headless version
+pip uninstall opencv-python
+pip install opencv-python-headless==4.8.1.78
+
+# For Linux systems, you might need system dependencies
+sudo apt-get update
+sudo apt-get install python3-opencv
+```
+
+**Scikit-learn Issues:**
+```bash
+# Ensure compatible versions
+pip install scikit-learn==1.3.2 joblib==1.3.2
+```
+
 #### TensorFlow/GPU Issues
 ```bash
 # For CPU-only installation
@@ -179,6 +208,17 @@ python -c "import tensorflow as tf; print(tf.__version__)"
 
 # Check GPU availability
 python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+```
+
+#### Complete Fresh Installation
+```bash
+# If all else fails, complete fresh setup
+rm -rf venv node_modules
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
+npm install
 ```
 
 ## 📊 Development Workflow
