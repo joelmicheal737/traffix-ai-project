@@ -11,6 +11,8 @@ const Upload = () => {
   const [videoResult, setVideoResult] = useState<any>(null);
   const [csvError, setCsvError] = useState<string>('');
   const [videoError, setVideoError] = useState<string>('');
+  const [csvAnalysis, setCsvAnalysis] = useState<any>(null);
+  const [videoAnalysis, setVideoAnalysis] = useState<any>(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -280,6 +282,56 @@ const Upload = () => {
                     <p className="text-xs text-red-500 mt-1">
                       💡 Tip: Ensure your CSV has columns: timestamp, location, vehicle_count, avg_speed, congestion_level, weather, day_of_week
                     </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Enhanced CSV Analysis Dashboard */}
+            {csvAnalysis && (
+              <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+                <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  Traffic Analysis Dashboard
+                </h3>
+                
+                {/* Summary Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-blue-600">{csvAnalysis.summary.total_locations}</div>
+                    <div className="text-sm text-gray-600">Total Locations</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-red-600">{csvAnalysis.summary.heavy_congestion_locations}</div>
+                    <div className="text-sm text-gray-600">Heavy Congestion Areas</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-orange-600">{csvAnalysis.summary.congestion_percentage}%</div>
+                    <div className="text-sm text-gray-600">Congestion Rate</div>
+                  </div>
+                </div>
+
+                {/* Heavy Congestion Areas */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-3">🚨 Areas with Heavy Congestion</h4>
+                  <div className="space-y-2">
+                    {csvAnalysis.heavy_congestion_areas.map((area: string, index: number) => (
+                      <div key={index} className="bg-red-50 p-3 rounded-lg border-l-4 border-red-400">
+                        <span className="text-red-800 font-medium">{area}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* AI Recommendations */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">🤖 AI-Generated Recommendations</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {csvAnalysis.recommendations.map((rec: string, index: number) => (
+                      <div key={index} className="bg-green-50 p-3 rounded-lg border-l-4 border-green-400">
+                        <span className="text-green-800 text-sm">{rec}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

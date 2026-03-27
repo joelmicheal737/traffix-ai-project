@@ -524,6 +524,83 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Traffic Congestion Distribution - Moved from Upload page */}
+        <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Traffic Congestion Distribution - All 104 Locations</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Pie Chart */}
+            <div className="flex justify-center">
+              <div style={{ width: '300px', height: '300px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={congestionData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={120}
+                      dataKey="value"
+                      label={({ name, percent, value }) => `${name}\n${value} locations\n${(percent * 100).toFixed(1)}%`}
+                      labelLine={false}
+                      fontSize={12}
+                      fontWeight="bold"
+                    >
+                      {congestionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} stroke="#ffffff" strokeWidth={2} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value, name) => [`${value} locations`, name]}
+                      contentStyle={{
+                        backgroundColor: '#ffffff',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        fontSize: '14px',
+                        fontWeight: 'bold'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            
+            {/* Enhanced Legend */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-lg text-gray-900 mb-4">Traffic Status Overview</h4>
+              {congestionData.map((entry, index) => {
+                const descriptions = {
+                  'Low': 'Smooth traffic flow',
+                  'Medium': 'Moderate congestion',
+                  'High': 'Heavy traffic',
+                  'Very High': 'Severe congestion'
+                };
+                return (
+                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4" style={{ borderLeftColor: entry.color }}>
+                    <div className="flex items-center">
+                      <div 
+                        className="w-5 h-5 rounded-full mr-4 border-2 border-white shadow-sm"
+                        style={{ backgroundColor: entry.color }}
+                      ></div>
+                      <div>
+                        <span className="font-semibold text-gray-800 text-lg">{entry.name}</span>
+                        <p className="text-sm text-gray-600">{descriptions[entry.name as keyof typeof descriptions]}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-2xl" style={{ color: entry.color }}>
+                        {entry.value}
+                      </div>
+                      <div className="text-sm text-gray-500">locations</div>
+                      <div className="text-xs text-gray-400">{((entry.value / 104) * 100).toFixed(0)}%</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
