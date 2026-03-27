@@ -286,56 +286,6 @@ const Upload = () => {
                 </div>
               </div>
             )}
-
-            {/* Enhanced CSV Analysis Dashboard */}
-            {csvAnalysis && (
-              <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
-                <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center">
-                  <BarChart3 className="w-5 h-5 mr-2" />
-                  Traffic Analysis Dashboard
-                </h3>
-                
-                {/* Summary Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <div className="text-2xl font-bold text-blue-600">{csvAnalysis.summary.total_locations}</div>
-                    <div className="text-sm text-gray-600">Total Locations</div>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <div className="text-2xl font-bold text-red-600">{csvAnalysis.summary.heavy_congestion_locations}</div>
-                    <div className="text-sm text-gray-600">Heavy Congestion Areas</div>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <div className="text-2xl font-bold text-orange-600">{csvAnalysis.summary.congestion_percentage}%</div>
-                    <div className="text-sm text-gray-600">Congestion Rate</div>
-                  </div>
-                </div>
-
-                {/* Heavy Congestion Areas */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">🚨 Areas with Heavy Congestion</h4>
-                  <div className="space-y-2">
-                    {csvAnalysis.heavy_congestion_areas.map((area: string, index: number) => (
-                      <div key={index} className="bg-red-50 p-3 rounded-lg border-l-4 border-red-400">
-                        <span className="text-red-800 font-medium">{area}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* AI Recommendations */}
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">🤖 AI-Generated Recommendations</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {csvAnalysis.recommendations.map((rec: string, index: number) => (
-                      <div key={index} className="bg-green-50 p-3 rounded-lg border-l-4 border-green-400">
-                        <span className="text-green-800 text-sm">{rec}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Video Upload Section */}
@@ -441,90 +391,58 @@ const Upload = () => {
                 </div>
               </div>
             )}
-          </div>
-        </div>
 
-        {/* Traffic Congestion Distribution */}
-        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Traffic Congestion Distribution</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Pie Chart */}
-            <div className="flex justify-center">
-              <div style={{ width: '300px', height: '300px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={[
-                        { name: 'Low', value: 25, color: '#10B981' },
-                        { name: 'Medium', value: 35, color: '#F59E0B' },
-                        { name: 'High', value: 28, color: '#EF4444' },
-                        { name: 'Very High', value: 12, color: '#7C2D12' }
-                      ]}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={120}
-                      dataKey="value"
-                      label={({ name, percent, value }) => `${name}\n${value} locations\n${(percent * 100).toFixed(1)}%`}
-                      labelLine={false}
-                      fontSize={12}
-                      fontWeight="bold"
-                    >
-                      {[
-                        { name: 'Low', value: 25, color: '#10B981' },
-                        { name: 'Medium', value: 35, color: '#F59E0B' },
-                        { name: 'High', value: 28, color: '#EF4444' },
-                        { name: 'Very High', value: 12, color: '#7C2D12' }
-                      ].map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} stroke="#ffffff" strokeWidth={2} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      formatter={(value, name) => [`${value} locations`, name]}
-                      contentStyle={{
-                        backgroundColor: '#ffffff',
-                        border: '2px solid #e5e7eb',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                        fontSize: '14px',
-                        fontWeight: 'bold'
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-            
-            {/* Enhanced Legend */}
-            <div className="space-y-3">
-              <h4 className="font-bold text-lg text-gray-900 mb-4">Traffic Status Overview</h4>
-              {[
-                { name: 'Low', value: 25, color: '#10B981', description: 'Smooth traffic flow' },
-                { name: 'Medium', value: 35, color: '#F59E0B', description: 'Moderate congestion' },
-                { name: 'High', value: 28, color: '#EF4444', description: 'Heavy traffic' },
-                { name: 'Very High', value: 12, color: '#7C2D12', description: 'Severe congestion' }
-              ].map((entry, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4" style={{ borderLeftColor: entry.color }}>
-                  <div className="flex items-center">
-                    <div 
-                      className="w-5 h-5 rounded-full mr-4 border-2 border-white shadow-sm"
-                      style={{ backgroundColor: entry.color }}
-                    ></div>
-                    <div>
-                      <span className="font-semibold text-gray-800 text-lg">{entry.name}</span>
-                      <p className="text-sm text-gray-600">{entry.description}</p>
-                    </div>
+            {/* Enhanced Video Analysis Dashboard */}
+            {videoAnalysis && (
+              <div className="mt-6 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-lg border border-purple-200">
+                <h3 className="text-lg font-bold text-purple-900 mb-4 flex items-center">
+                  <Video className="w-5 h-5 mr-2" />
+                  Traffic Congestion Dashboard
+                </h3>
+                
+                {/* Analysis Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-purple-600">{videoAnalysis.vehicle_density}</div>
+                    <div className="text-sm text-gray-600">Vehicles/Second</div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-bold text-2xl" style={{ color: entry.color }}>
-                      {entry.value}
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <div className={`text-2xl font-bold ${
+                      videoAnalysis.congestion_level === 'Heavy' ? 'text-red-600' :
+                      videoAnalysis.congestion_level === 'Medium' ? 'text-orange-600' : 'text-green-600'
+                    }`}>
+                      {videoAnalysis.congestion_level}
                     </div>
-                    <div className="text-sm text-gray-500">locations</div>
-                    <div className="text-xs text-gray-400">{((entry.value / 100) * 100).toFixed(0)}%</div>
+                    <div className="text-sm text-gray-600">Congestion Level</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-blue-600">{videoAnalysis.observations.length}</div>
+                    <div className="text-sm text-gray-600">Key Observations</div>
                   </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Timestamped Observations */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">⏱️ Timestamped Observations</h4>
+                  <div className="space-y-3">
+                    {videoAnalysis.observations.map((obs: any, index: number) => (
+                      <div key={index} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-400">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="font-medium text-purple-900">{obs.timestamp}</div>
+                            <div className="text-gray-700">{obs.observation}</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-purple-600">{obs.vehicles}</div>
+                            <div className="text-xs text-gray-500">vehicles</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
