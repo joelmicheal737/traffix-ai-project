@@ -274,71 +274,38 @@ const AIPrediction = () => {
   };
   
   const exportToPDF = () => {
-    const printContent = `
-      <html>
-        <head>
-          <title>Traffic Predictions Report</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            h1 { color: #1F2937; border-bottom: 2px solid #3B82F6; padding-bottom: 10px; }
-            h2 { color: #374151; margin-top: 30px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #D1D5DB; padding: 8px; text-align: left; }
-            th { background-color: #F3F4F6; font-weight: bold; }
-            .summary { background-color: #F9FAFB; padding: 15px; border-radius: 8px; margin: 20px 0; }
-            .low { color: #10B981; font-weight: bold; }
-            .medium { color: #F59E0B; font-weight: bold; }
-            .high { color: #EF4444; font-weight: bold; }
-            .very_high { color: #7C2D12; font-weight: bold; }
-          </style>
-        </head>
-        <body>
-          <h1>🚦 Traffic Predictions Report</h1>
-          <div class="summary">
-            <h2>📊 Summary</h2>
-            <p><strong>Location:</strong> ${selectedLocation}</p>
-            <p><strong>Prediction Period:</strong> ${daysAhead} days</p>
-            <p><strong>Total Predictions:</strong> ${predictions.length}</p>
-            <p><strong>Average Congestion:</strong> ${getCongestionLevel(avgPrediction).level}</p>
-            <p><strong>Peak Congestion:</strong> ${getCongestionLevel(maxCongestion).level}</p>
-            <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
-          </div>
-          
-          <h2>📈 Detailed Predictions</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Timestamp</th>
-                <th>Predicted Congestion</th>
-                <th>Confidence Range</th>
-                <th>Level</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${predictions.slice(0, 100).map(pred => {
-                const level = getCongestionLevel(pred.predicted_congestion);
-                return `
-                  <tr>
-                    <td>${new Date(pred.predicted_timestamp).toLocaleString()}</td>
-                    <td>${pred.predicted_congestion.toFixed(2)}</td>
-                    <td>${pred.confidence_interval_lower.toFixed(2)} - ${pred.confidence_interval_upper.toFixed(2)}</td>
-                    <td class="${level.level.toLowerCase().replace(' ', '_')}">${level.level}</td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-          ${predictions.length > 100 ? '<p><em>Showing first 100 predictions. Download Excel for complete data.</em></p>' : ''}
-        </body>
-      </html>
-    `;
+    // Create PDF content as text format for download
+    const pdfContent = [
+      '🚦 TRAFFIC PREDICTIONS REPORT',
+      '=' .repeat(50),
+      '',
+      '📊 SUMMARY',
+      '-'.repeat(20),
+      `Location: ${selectedLocation}`,
+      `Prediction Period: ${daysAhead} days`,
+      `Total Predictions: ${predictions.length}`,
+      `Average Congestion: ${getCongestionLevel(avgPrediction).level}`,
+      `Peak Congestion: ${getCongestionLevel(maxCongestion).level}`,
+      `Generated: ${new Date().toLocaleString()}`,
+      '',
+      '📈 DETAILED PREDICTIONS',
+      '-'.repeat(30),
+      'Timestamp\t\t\tPredicted\tConfidence Range\tLevel',
+      ...predictions.slice(0, 100).map(pred => {
+        const level = getCongestionLevel(pred.predicted_congestion);
+        return `${new Date(pred.predicted_timestamp).toLocaleString()}\t${pred.predicted_congestion.toFixed(2)}\t${pred.confidence_interval_lower.toFixed(2)} - ${pred.confidence_interval_upper.toFixed(2)}\t${level.level}`;
+      }),
+      '',
+      predictions.length > 100 ? 'Note: Showing first 100 predictions. Download Excel for complete data.' : ''
+    ].join('\n');
     
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      printWindow.document.write(printContent);
-      printWindow.document.close();
-      printWindow.print();
-    }
+    const blob = new Blob([pdfContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `traffic_predictions_${selectedLocation}_${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   return (
