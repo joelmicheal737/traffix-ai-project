@@ -252,6 +252,95 @@ const AIPrediction = () => {
   const maxCongestion = Math.max(...predictions.map(p => p.predicted_congestion));
   const minCongestion = Math.min(...predictions.map(p => p.predicted_congestion));
 
+  const exportToExcel = () => {
+    const csvContent = [
+      ['Timestamp', 'Predicted Congestion', 'Lower Bound', 'Upper Bound', 'Congestion Level'],
+      ...predictions.map(pred => [
+        new Date(pred.predicted_timestamp).toLocaleString(),
+        pred.predicted_congestion.toFixed(2),
+        pred.confidence_interval_lower.toFixed(2),
+        pred.confidence_interval_upper.toFixed(2),
+        getCongestionLevel(pred.predicted_congestion).level
+      ])
+    ].map(row => row.join(',')).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `traffic_predictions_${selectedLocation}_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+  
+  const exportToPDF = () => {
+    const printContent = `
+      <html>
+        <head>
+          <title>Traffic Predictions Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { color: #1F2937; border-bottom: 2px solid #3B82F6; padding-bottom: 10px; }
+            h2 { color: #374151; margin-top: 30px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #D1D5DB; padding: 8px; text-align: left; }
+            th { background-color: #F3F4F6; font-weight: bold; }
+            .summary { background-color: #F9FAFB; padding: 15px; border-radius: 8px; margin: 20px 0; }
+            .low { color: #10B981; font-weight: bold; }
+            .medium { color: #F59E0B; font-weight: bold; }
+            .high { color: #EF4444; font-weight: bold; }
+            .very_high { color: #7C2D12; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <h1>🚦 Traffic Predictions Report</h1>
+          <div class="summary">
+            <h2>📊 Summary</h2>
+            <p><strong>Location:</strong> ${selectedLocation}</p>
+            <p><strong>Prediction Period:</strong> ${daysAhead} days</p>
+            <p><strong>Total Predictions:</strong> ${predictions.length}</p>
+            <p><strong>Average Congestion:</strong> ${getCongestionLevel(avgPrediction).level}</p>
+            <p><strong>Peak Congestion:</strong> ${getCongestionLevel(maxCongestion).level}</p>
+            <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
+          </div>
+          
+          <h2>📈 Detailed Predictions</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Predicted Congestion</th>
+                <th>Confidence Range</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${predictions.slice(0, 100).map(pred => {
+                const level = getCongestionLevel(pred.predicted_congestion);
+                return `
+                  <tr>
+                    <td>${new Date(pred.predicted_timestamp).toLocaleString()}</td>
+                    <td>${pred.predicted_congestion.toFixed(2)}</td>
+                    <td>${pred.confidence_interval_lower.toFixed(2)} - ${pred.confidence_interval_upper.toFixed(2)}</td>
+                    <td class="${level.level.toLowerCase().replace(' ', '_')}">${level.level}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+          ${predictions.length > 100 ? '<p><em>Showing first 100 predictions. Download Excel for complete data.</em></p>' : ''}
+        </body>
+      </html>
+    `;
+    
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -388,7 +477,7 @@ const AIPrediction = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Traffic Congestion Forecast - {selectedLocation}
               </h3>
-              <div className="h-96">
+              <div className="h-96 overflow-x-auto">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -436,17 +525,41 @@ const AIPrediction = () => {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
+              
+              {/* Export Buttons */}
+              <div className="flex justify-center space-x-4 mt-4">
+                <button
+                  onClick={exportToExcel}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download Excel
+                </button>
+                <button
+                  onClick={exportToPDF}
+                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  Download PDF
+                </button>
+              </div>
             </div>
 
             {/* Prediction Table */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">All Predictions ({predictions.length} total)</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Complete Prediction Dataset ({predictions.length} total)
+                </h3>
                 <div className="text-sm text-gray-600">
                   Page {currentPage} of {totalPages}
                 </div>
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto max-h-96 overflow-y-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>

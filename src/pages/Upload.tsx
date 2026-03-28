@@ -13,6 +13,8 @@ const Upload = () => {
   const [videoError, setVideoError] = useState<string>('');
   const [csvAnalysis, setCsvAnalysis] = useState<any>(null);
   const [videoAnalysis, setVideoAnalysis] = useState<any>(null);
+  const [csvAnalytics, setCsvAnalytics] = useState<any>(null);
+  const [videoAnalytics, setVideoAnalytics] = useState<any>(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -287,6 +289,52 @@ const Upload = () => {
               </div>
             )}
           </div>
+          
+          {/* Enhanced Video Analytics Dashboard */}
+          {videoAnalytics && (
+            <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">🎥 Video Traffic Analytics</h3>
+              
+              {/* Analytics Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-blue-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-blue-600">{videoAnalytics.vehiclesPerMinute}</div>
+                  <div className="text-sm text-blue-800">Vehicles/Minute</div>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-green-600">{videoAnalytics.trafficDensity}</div>
+                  <div className="text-sm text-green-800">Traffic Density</div>
+                </div>
+                <div className="bg-orange-50 p-4 rounded-lg text-center">
+                  <div 
+                    className="text-2xl font-bold"
+                    style={{ color: videoAnalytics.congestionColor }}
+                  >
+                    {videoAnalytics.congestionLevel}
+                  </div>
+                  <div className="text-sm text-gray-600">Congestion Level</div>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-purple-600">{videoAnalytics.duration}s</div>
+                  <div className="text-sm text-purple-800">Video Duration</div>
+                </div>
+              </div>
+              
+              {/* Vehicle Type Distribution */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-bold text-gray-900 mb-3">🚗 Vehicle Type Distribution</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {videoAnalytics.vehicleTypes?.map((vehicle: any, index: number) => (
+                    <div key={index} className="bg-white p-3 rounded-lg text-center">
+                      <div className="text-lg font-bold text-gray-900">{vehicle.count}</div>
+                      <div className="text-sm text-gray-600">{vehicle.type}</div>
+                      <div className="text-xs text-blue-600">{vehicle.percentage}%</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Video Upload Section */}
           <div className="bg-white p-6 rounded-lg shadow-md">
