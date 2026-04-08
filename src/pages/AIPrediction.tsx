@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Brain, TrendingUp, Calendar, MapPin, Loader, AlertCircle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface Prediction {
   predicted_timestamp: string;
@@ -274,38 +276,144 @@ const AIPrediction = () => {
   };
   
   const exportToPDF = () => {
-    // Create PDF content as text format for download
-    const pdfContent = [
-      '🚦 TRAFFIC PREDICTIONS REPORT',
-      '=' .repeat(50),
-      '',
-      '📊 SUMMARY',
-      '-'.repeat(20),
-      `Location: ${selectedLocation}`,
-      `Prediction Period: ${daysAhead} days`,
-      `Total Predictions: ${predictions.length}`,
-      `Average Congestion: ${getCongestionLevel(avgPrediction).level}`,
-      `Peak Congestion: ${getCongestionLevel(maxCongestion).level}`,
-      `Generated: ${new Date().toLocaleString()}`,
-      '',
-      '📈 DETAILED PREDICTIONS',
-      '-'.repeat(30),
-      'Timestamp\t\t\tPredicted\tConfidence Range\tLevel',
-      ...predictions.slice(0, 100).map(pred => {
-        const level = getCongestionLevel(pred.predicted_congestion);
-        return `${new Date(pred.predicted_timestamp).toLocaleString()}\t${pred.predicted_congestion.toFixed(2)}\t${pred.confidence_interval_lower.toFixed(2)} - ${pred.confidence_interval_upper.toFixed(2)}\t${level.level}`;
-      }),
-      '',
-      predictions.length > 100 ? 'Note: Showing first 100 predictions. Download Excel for complete data.' : ''
-    ].join('\n');
-    
-    const blob = new Blob([pdfContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `traffic_predictions_${selectedLocation}_${new Date().toISOString().split('T')[0]}.txt`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPosition = 20;
+
+    // Title
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TRAFFIC PREDICTIONS REPORT', pageWidth / 2, yPosition, { align: 'center' });
+
+    yPosition += 15;
+
+    // Summary Section
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('SUMMARY', 14, yPosition);
+
+    yPosition += 8;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+
+    const summaryData = [
+      ['Location:', selectedLocation],
+      ['Prediction Period:', `${daysAhead} days`],
+      ['Total Predictions:', predictions.length.toString()],
+      ['Average Congestion:', getCongestionLevel(avgPrediction).level],
+      ['Peak Congestion:', getCongestionLevel(maxCongestion).level],
+      ['Minimum Congestion:', getCongestionLevel(minCongestion).level],
+      ['Generated:', new Date().toLocaleString()]
+    ];
+
+    autoTable(doc, {
+      startY: yPosition,
+      head: [],
+      body: summaryData,
+      theme: 'grid',
+      styles: { fontSize: 9, cellPadding: 3 },
+      columnStyles: {
+        0: { fontStyle: 'bold', cellWidth: 50 },
+        1: { cellWidth: 'auto' }
+      },
+      margin: { left: 14, right: 14 }
+    });
+
+    yPosition = (doc as any).lastAutoTable.finalY + 10;
+
+    // Detailed Predictions Section
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DETAILED PREDICTIONS', 14, yPosition);
+
+    yPosition += 5;
+
+    // Prepare table data
+    const tableData = predictions.map((pred, index) => {
+      const level = getCongestionLevel(pred.predicted_congestion);
+      return [
+        (index + 1).toString(),
+        new Date(pred.predicted_timestamp).toLocaleString('en-US', {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        }),
+        pred.predicted_congestion.toFixed(2),
+        `${pred.confidence_interval_lower.toFixed(2)} - ${pred.confidence_interval_upper.toFixed(2)}`,
+        level.level
+      ];
+    });
+
+    // Create table with all predictions
+    autoTable(doc, {
+      startY: yPosition,
+      head: [['#', 'Timestamp', 'Predicted', 'Confidence Range', 'Level']],
+      body: tableData,
+      theme: 'striped',
+      styles: {
+        fontSize: 8,
+        cellPadding: 2,
+        overflow: 'linebreak'
+      },
+      headStyles: {
+        fillColor: [59, 130, 246],
+        textColor: 255,
+        fontStyle: 'bold',
+        fontSize: 9
+      },
+      columnStyles: {
+        0: { cellWidth: 12, halign: 'center' },
+        1: { cellWidth: 50 },
+        2: { cellWidth: 25, halign: 'center' },
+        3: { cellWidth: 45, halign: 'center' },
+        4: { cellWidth: 25, halign: 'center' }
+      },
+      margin: { left: 14, right: 14 },
+      didDrawCell: (data) => {
+        // Color code the Level column based on congestion
+        if (data.column.index === 4 && data.section === 'body') {
+          const levelText = data.cell.text[0];
+          let color = [107, 114, 128]; // gray default
+
+          if (levelText === 'Low') color = [16, 185, 129]; // green
+          else if (levelText === 'Medium') color = [245, 158, 11]; // yellow
+          else if (levelText === 'High') color = [239, 68, 68]; // red
+          else if (levelText === 'Very High') color = [124, 45, 18]; // dark red
+
+          doc.setTextColor(color[0], color[1], color[2]);
+          doc.setFont('helvetica', 'bold');
+        }
+      },
+      didParseCell: (data) => {
+        // Reset text color for other cells
+        if (data.column.index !== 4) {
+          doc.setTextColor(0, 0, 0);
+          doc.setFont('helvetica', 'normal');
+        }
+      }
+    });
+
+    // Footer on last page
+    const totalPages = (doc as any).internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(128, 128, 128);
+      doc.text(
+        `Page ${i} of ${totalPages} | Traffix AI - Coimbatore Traffic Predictions | Generated: ${new Date().toLocaleDateString()}`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+    }
+
+    // Save PDF
+    doc.save(`traffic_predictions_${selectedLocation}_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   return (
