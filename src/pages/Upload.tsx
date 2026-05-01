@@ -505,47 +505,61 @@ const Upload = () => {
 
         {/* Sample Data Section */}
         <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Sample Data Format</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">CSV Format Requirements</h3>
           <p className="text-gray-600 mb-4">
-            Your CSV file should contain the following columns:
+            Your CSV file must contain exactly these 4 required columns:
           </p>
           <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left py-2 px-3">timestamp</th>
-                  <th className="text-left py-2 px-3">location</th>
-                  <th className="text-left py-2 px-3">vehicle_count</th>
-                  <th className="text-left py-2 px-3">avg_speed</th>
-                  <th className="text-left py-2 px-3">congestion_level</th>
-                  <th className="text-left py-2 px-3">weather</th>
-                  <th className="text-left py-2 px-3">day_of_week</th>
+                <tr className="border-b bg-gray-100">
+                  <th className="text-left py-2 px-3 font-bold">vehicle_count</th>
+                  <th className="text-left py-2 px-3 font-bold">road_type</th>
+                  <th className="text-left py-2 px-3 font-bold">time</th>
+                  <th className="text-left py-2 px-3 font-bold">congestion_level</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="py-2 px-3">2024-01-01 08:00:00</td>
-                  <td className="py-2 px-3">Gandhipuram</td>
                   <td className="py-2 px-3">245</td>
-                  <td className="py-2 px-3">25.5</td>
+                  <td className="py-2 px-3">Highway</td>
+                  <td className="py-2 px-3">2024-01-01 08:00:00</td>
                   <td className="py-2 px-3">high</td>
-                  <td className="py-2 px-3">clear</td>
-                  <td className="py-2 px-3">monday</td>
+                </tr>
+                <tr>
+                  <td className="py-2 px-3">512</td>
+                  <td className="py-2 px-3">Arterial</td>
+                  <td className="py-2 px-3">2024-01-01 12:00:00</td>
+                  <td className="py-2 px-3">very_high</td>
+                </tr>
+                <tr>
+                  <td className="py-2 px-3">378</td>
+                  <td className="py-2 px-3">Local Street</td>
+                  <td className="py-2 px-3">2024-01-01 14:30:00</td>
+                  <td className="py-2 px-3">medium</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-            <h4 className="font-medium text-gray-900 mb-2">📋 CSV Requirements:</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• <strong>timestamp:</strong> ISO format (YYYY-MM-DD HH:MM:SS)</li>
-              <li>• <strong>location:</strong> Coimbatore area name</li>
-              <li>• <strong>vehicle_count:</strong> Number of vehicles (0-1000)</li>
-              <li>• <strong>avg_speed:</strong> Average speed in km/h (0-120)</li>
-              <li>• <strong>congestion_level:</strong> low, medium, high, very_high</li>
-              <li>• <strong>weather:</strong> clear, cloudy, rainy, foggy</li>
-              <li>• <strong>day_of_week:</strong> monday, tuesday, etc.</li>
+
+          <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-medium text-blue-900 mb-2">Required CSV Columns:</h4>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li>• <strong>vehicle_count:</strong> Integer (0-10000)</li>
+              <li>• <strong>road_type:</strong> Text (Highway, Arterial, Local, etc.)</li>
+              <li>• <strong>time:</strong> ISO format (YYYY-MM-DD HH:MM:SS)</li>
+              <li>• <strong>congestion_level:</strong> low, medium, high, or very_high</li>
+            </ul>
+          </div>
+
+          <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+            <h4 className="font-medium text-amber-900 mb-2">Valid Entries Only:</h4>
+            <ul className="text-sm text-amber-800 space-y-1">
+              <li>• No extra columns - only the 4 required columns</li>
+              <li>• No empty values in any column</li>
+              <li>• All vehicle counts must be numeric and non-negative</li>
+              <li>• Congestion levels must be exactly: low, medium, high, or very_high</li>
+              <li>• Time must be in ISO format (YYYY-MM-DD HH:MM:SS)</li>
             </ul>
           </div>
         </div>
