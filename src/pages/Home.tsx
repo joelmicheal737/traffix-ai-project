@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BarChart3, MapPin, Upload, Brain, Users, Clock } from 'lucide-react';
+import { BarChart3, MapPin, Upload, Brain } from 'lucide-react';
 
 const Home = () => {
   const features = [
@@ -23,13 +23,6 @@ const Home = () => {
       title: 'Advanced Analytics',
       description: 'Detailed charts and visualizations showing traffic patterns, congestion trends, and historical data analysis.',
     },
-  ];
-
-  const stats = [
-    { label: 'Locations Monitored', value: '25+', icon: <MapPin className="w-6 h-6" /> },
-    { label: 'Daily Predictions', value: '1000+', icon: <Brain className="w-6 h-6" /> },
-    { label: 'Active Users', value: '500+', icon: <Users className="w-6 h-6" /> },
-    { label: 'Uptime', value: '99.9%', icon: <Clock className="w-6 h-6" /> },
   ];
 
   return (
@@ -65,23 +58,6 @@ const Home = () => {
                 Try AI Prediction
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="flex justify-center mb-4 text-blue-600">
-                  {stat.icon}
-                </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
