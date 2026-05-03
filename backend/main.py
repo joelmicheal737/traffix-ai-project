@@ -712,19 +712,18 @@ class HybridTrafficPredictor:
 
 # Enhanced YOLO Video Analysis
 class AdvancedVideoAnalyzer:
-    """Advanced video analysis with multiple YOLO models"""
-    
+    """Advanced video analysis with YOLO detection and traffic validation"""
+
+    # Only vehicle-related YOLO class IDs (from COCO dataset)
+    VEHICLE_CLASSES = {
+        2: 'car', 3: 'motorcycle', 5: 'bus', 7: 'truck'
+    }
+
     def __init__(self):
-        self.models = {
-            'yolov8n': None,
-            'yolov8s': None,
-            'yolov8m': None
-        }
-        self.vehicle_classes = {
-            2: 'car', 3: 'motorcycle', 5: 'bus', 7: 'truck',
-            1: 'bicycle', 0: 'person'
-        }
-    
+        self.models = {'yolov8n': None}
+        self.min_traffic_frames_percent = 0.3  # At least 30% frames with vehicles
+        self.min_vehicle_detections = 5  # At least 5 vehicles across whole video
+
     def load_model(self, model_name='yolov8n'):
         """Load YOLO model"""
         if self.models[model_name] is None:
@@ -733,73 +732,135 @@ class AdvancedVideoAnalyzer:
                 logger.info(f"Loaded {model_name} model")
             except Exception as e:
                 logger.error(f"Failed to load {model_name}: {str(e)}")
-                # Fallback to nano model
-                self.models['yolov8n'] = YOLO('yolov8n.pt')
-                return 'yolov8n'
+                raise Exception(f"Failed to load YOLO model: {str(e)}")
         return model_name
-    
+
+    def validate_video_format(self, filename):
+        """Validate video file format"""
+        valid_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv')
+        if not filename.lower().endswith(valid_extensions):
+            raise Exception(f"Invalid video format. Accepted formats: mp4, avi, mov, mkv, flv, wmv")
+        return True
+
+    def is_traffic_scene(self, vehicles_detected):
+        """Check if video contains actual traffic (vehicles detected)"""
+        return vehicles_detected > 0
+
     def analyze_video(self, video_path, model_name='yolov8n', confidence_threshold=0.5):
-        """Analyze video with advanced features"""
+        """Analyze video with traffic validation and accurate metrics"""
         model_name = self.load_model(model_name)
         model = self.models[model_name]
-        
+
         cap = cv2.VideoCapture(video_path)
-        
+
+        # Validate video file
+        if not cap.isOpened():
+            raise Exception("Failed to open video file. Ensure it's a valid video.")
+
         # Video properties
-        fps = cap.get(cv2.CAP_PROP_FPS)
+        fps = cap.get(cv2.CAP_PROP_FPS) or 30
         frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        
-        vehicle_counts = {vehicle: 0 for vehicle in self.vehicle_classes.values()}
-        total_vehicles = 0
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        frame_area = width * height
+
+        if fps <= 0 or frame_count <= 0:
+            cap.release()
+            raise Exception("Video properties invalid. Ensure it's a valid traffic video.")
+
+        vehicle_type_counts = {vehicle: 0 for vehicle in self.VEHICLE_CLASSES.values()}
+        frame_vehicle_counts = []
+        frames_with_vehicles = 0
+        total_detections = 0
         confidence_scores = []
-        
+
         start_time = datetime.now()
         processed_frames = 0
-        
-        # Process every nth frame for efficiency
-        frame_skip = max(1, int(fps // 2))  # Process 2 frames per second
-        
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-            
-            current_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
-            
-            if current_frame % frame_skip == 0:
-                processed_frames += 1
-                
-                # Run inference
-                results = model(frame, conf=confidence_threshold)
-                
-                for result in results:
-                    boxes = result.boxes
-                    if boxes is not None:
-                        for box in boxes:
-                            class_id = int(box.cls[0])
-                            confidence = float(box.conf[0])
-                            
-                            if class_id in self.vehicle_classes:
-                                vehicle_type = self.vehicle_classes[class_id]
-                                vehicle_counts[vehicle_type] += 1
-                                total_vehicles += 1
-                                confidence_scores.append(confidence)
-        
-        cap.release()
+        frame_skip = max(1, int(fps // 2)) if fps > 1 else 1
+
+        try:
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
+
+                current_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
+
+                if current_frame % frame_skip == 0:
+                    processed_frames += 1
+                    frame_vehicle_count = 0
+
+                    # Run YOLO inference
+                    results = model(frame, conf=confidence_threshold, verbose=False)
+
+                    for result in results:
+                        boxes = result.boxes
+                        if boxes is not None and len(boxes) > 0:
+                            for box in boxes:
+                                try:
+                                    class_id = int(box.cls[0])
+                                    confidence = float(box.conf[0])
+
+                                    # Only count vehicle classes
+                                    if class_id in self.VEHICLE_CLASSES:
+                                        vehicle_type = self.VEHICLE_CLASSES[class_id]
+                                        vehicle_type_counts[vehicle_type] += 1
+                                        frame_vehicle_count += 1
+                                        total_detections += 1
+                                        confidence_scores.append(confidence)
+                                except (ValueError, IndexError):
+                                    continue
+
+                    if frame_vehicle_count > 0:
+                        frames_with_vehicles += 1
+                        frame_vehicle_counts.append(frame_vehicle_count)
+
+        finally:
+            cap.release()
+
         processing_time = (datetime.now() - start_time).total_seconds()
-        
-        # Calculate average confidence
+
+        # Validate that this is a traffic video
+        if total_detections < self.min_vehicle_detections:
+            raise Exception(f"Not a valid traffic video. Insufficient vehicle detections ({total_detections}). Minimum required: {self.min_vehicle_detections}")
+
+        # Calculate metrics
         avg_confidence = np.mean(confidence_scores) if confidence_scores else 0.0
-        
+        max_vehicles_per_frame = max(frame_vehicle_counts) if frame_vehicle_counts else 0
+        avg_vehicles_per_frame = np.mean(frame_vehicle_counts) if frame_vehicle_counts else 0
+
+        # Calculate vehicle density (vehicles per frame area in thousands)
+        density = (avg_vehicles_per_frame / (frame_area / 1000000)) if frame_area > 0 else 0
+
+        # Determine congestion level based on density and vehicle distribution
+        if density > 0.005 or avg_vehicles_per_frame > 15:
+            congestion_level = 'very_high'
+        elif density > 0.003 or avg_vehicles_per_frame > 10:
+            congestion_level = 'high'
+        elif density > 0.001 or avg_vehicles_per_frame > 5:
+            congestion_level = 'medium'
+        else:
+            congestion_level = 'low'
+
+        video_duration = frame_count / fps if fps > 0 else 0
+        vehicles_per_minute = (total_detections / (video_duration / 60)) if video_duration > 0 else 0
+
         return {
-            'total_vehicles': total_vehicles,
-            'vehicle_types': vehicle_counts,
+            'total_vehicles': total_detections,
+            'vehicle_types': vehicle_type_counts,
             'processing_time': processing_time,
-            'confidence_score': avg_confidence,
+            'confidence_score': float(avg_confidence),
             'frame_count': frame_count,
-            'fps': fps,
+            'fps': float(fps),
             'processed_frames': processed_frames,
-            'model_used': model_name
+            'model_used': model_name,
+            'density': round(density, 6),
+            'congestion_level': congestion_level,
+            'avg_vehicles_per_frame': round(avg_vehicles_per_frame, 2),
+            'max_vehicles_per_frame': max_vehicles_per_frame,
+            'frames_with_vehicles': frames_with_vehicles,
+            'vehicles_per_minute': round(vehicles_per_minute, 2),
+            'video_duration_seconds': round(video_duration, 2)
         }
 
 # Global instances
@@ -1077,34 +1138,44 @@ async def generate_predictions(request: PredictionRequest):
 
 @app.post("/video-detect")
 async def analyze_video(file: UploadFile = File(...)):
-    """Advanced video analysis with multiple YOLO models"""
-    if not file.content_type.startswith('video/'):
-        raise HTTPException(status_code=400, detail="Only video files are allowed")
-    
+    """Advanced video analysis with traffic validation and YOLO detection"""
+    temp_video_path = None
+
     try:
+        # Validate file format
+        try:
+            video_analyzer.validate_video_format(file.filename)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+        # Validate file size (max 200MB)
+        content = await file.read()
+        if len(content) > 200 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Video file too large. Maximum size: 200MB")
+
         # Save uploaded video temporarily
         with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_file:
-            content = await file.read()
             temp_file.write(content)
             temp_video_path = temp_file.name
-        
+
         # Analyze video
         results = await asyncio.get_event_loop().run_in_executor(
             executor,
             video_analyzer.analyze_video,
             temp_video_path,
-            'yolov8n',  # Use nano model for speed
-            0.5  # Confidence threshold
+            'yolov8n',
+            0.45
         )
-        
+
         # Store results in database
         conn = sqlite3.connect(DATABASE_PATH)
         cursor = conn.cursor()
-        
+
         cursor.execute("""
-            INSERT INTO video_analysis 
-            (filename, total_vehicles, vehicle_types, processing_time, confidence_score, frame_count, fps)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO video_analysis
+            (filename, total_vehicles, vehicle_types, processing_time, confidence_score,
+             frame_count, fps, density, congestion_level, avg_vehicles_per_frame)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             file.filename,
             results['total_vehicles'],
@@ -1112,25 +1183,41 @@ async def analyze_video(file: UploadFile = File(...)):
             results['processing_time'],
             results['confidence_score'],
             results['frame_count'],
-            results['fps']
+            results['fps'],
+            results['density'],
+            results['congestion_level'],
+            results['avg_vehicles_per_frame']
         ))
-        
+
         conn.commit()
         conn.close()
-        
+
         # Clean up temporary file
-        os.unlink(temp_video_path)
-        
-        return VideoAnalysisResult(**results)
-        
-    except Exception as e:
-        # Clean up temporary file if it exists
-        if 'temp_video_path' in locals():
+        if temp_video_path:
             try:
                 os.unlink(temp_video_path)
             except:
                 pass
-        raise HTTPException(status_code=500, detail=f"Error analyzing video: {str(e)}")
+
+        return results
+
+    except HTTPException:
+        if temp_video_path:
+            try:
+                os.unlink(temp_video_path)
+            except:
+                pass
+        raise
+    except Exception as e:
+        if temp_video_path:
+            try:
+                os.unlink(temp_video_path)
+            except:
+                pass
+        error_msg = str(e)
+        if "Not a valid traffic video" in error_msg or "invalid video" in error_msg.lower():
+            raise HTTPException(status_code=400, detail=error_msg)
+        raise HTTPException(status_code=500, detail=f"Error analyzing video: {error_msg}")
 
 @app.get("/traffic-data")
 async def get_traffic_data(location: Optional[str] = None, limit: int = 100):
