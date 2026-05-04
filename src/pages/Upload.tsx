@@ -202,8 +202,8 @@ const Upload = () => {
             </div>
             
             <p className="text-gray-600 mb-6">
-              Upload CSV files containing traffic data with columns: timestamp, location, vehicle_count, 
-              avg_speed, congestion_level, weather, day_of_week.
+              Upload traffic CSV files with required columns: timestamp, location, road_type, vehicle_count,
+              avg_speed, congestion_level, weather, day_of_week. Optional: incident_flag, lane_count, signal_status.
             </p>
 
             {/* File Input */}
@@ -291,7 +291,7 @@ const Upload = () => {
                     <p className="text-sm text-red-700 font-medium">Upload Failed</p>
                     <p className="text-sm text-red-600">{csvError}</p>
                     <p className="text-xs text-red-500 mt-1">
-                      💡 Tip: Ensure your CSV has columns: timestamp, location, vehicle_count, avg_speed, congestion_level, weather, day_of_week
+                      💡 Tip: Ensure your CSV has all required columns: timestamp, location, road_type, vehicle_count, avg_speed, congestion_level, weather, day_of_week
                     </p>
                   </div>
                 </div>
@@ -505,61 +505,93 @@ const Upload = () => {
 
         {/* Sample Data Section */}
         <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">CSV Format Requirements</h3>
-          <p className="text-gray-600 mb-4">
-            Your CSV file must contain exactly these 4 required columns:
-          </p>
-          <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Traffic CSV Format Requirements</h3>
+
+          <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto mb-6">
             <table className="min-w-full text-sm">
               <thead>
                 <tr className="border-b bg-gray-100">
-                  <th className="text-left py-2 px-3 font-bold">vehicle_count</th>
+                  <th className="text-left py-2 px-3 font-bold">timestamp</th>
+                  <th className="text-left py-2 px-3 font-bold">location</th>
                   <th className="text-left py-2 px-3 font-bold">road_type</th>
-                  <th className="text-left py-2 px-3 font-bold">time</th>
+                  <th className="text-left py-2 px-3 font-bold">vehicle_count</th>
+                  <th className="text-left py-2 px-3 font-bold">avg_speed</th>
                   <th className="text-left py-2 px-3 font-bold">congestion_level</th>
+                  <th className="text-left py-2 px-3 font-bold">weather</th>
+                  <th className="text-left py-2 px-3 font-bold">day_of_week</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="py-2 px-3">245</td>
-                  <td className="py-2 px-3">Highway</td>
+                <tr className="bg-white">
                   <td className="py-2 px-3">2024-01-01 08:00:00</td>
+                  <td className="py-2 px-3">NH44-Kochi</td>
+                  <td className="py-2 px-3">highway</td>
+                  <td className="py-2 px-3">245</td>
+                  <td className="py-2 px-3">35</td>
                   <td className="py-2 px-3">high</td>
+                  <td className="py-2 px-3">clear</td>
+                  <td className="py-2 px-3">Monday</td>
                 </tr>
-                <tr>
-                  <td className="py-2 px-3">512</td>
-                  <td className="py-2 px-3">Arterial</td>
+                <tr className="bg-gray-50">
                   <td className="py-2 px-3">2024-01-01 12:00:00</td>
+                  <td className="py-2 px-3">MG Road</td>
+                  <td className="py-2 px-3">arterial</td>
+                  <td className="py-2 px-3">512</td>
+                  <td className="py-2 px-3">18</td>
                   <td className="py-2 px-3">very_high</td>
+                  <td className="py-2 px-3">rainy</td>
+                  <td className="py-2 px-3">Monday</td>
                 </tr>
-                <tr>
-                  <td className="py-2 px-3">378</td>
-                  <td className="py-2 px-3">Local Street</td>
+                <tr className="bg-white">
                   <td className="py-2 px-3">2024-01-01 14:30:00</td>
-                  <td className="py-2 px-3">medium</td>
+                  <td className="py-2 px-3">Lake Road</td>
+                  <td className="py-2 px-3">residential</td>
+                  <td className="py-2 px-3">78</td>
+                  <td className="py-2 px-3">42</td>
+                  <td className="py-2 px-3">low</td>
+                  <td className="py-2 px-3">cloudy</td>
+                  <td className="py-2 px-3">Tuesday</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <h4 className="font-medium text-blue-900 mb-2">Required CSV Columns:</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>• <strong>vehicle_count:</strong> Integer (0-10000)</li>
-              <li>• <strong>road_type:</strong> Text (Highway, Arterial, Local, etc.)</li>
-              <li>• <strong>time:</strong> ISO format (YYYY-MM-DD HH:MM:SS)</li>
-              <li>• <strong>congestion_level:</strong> low, medium, high, or very_high</li>
-            </ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <h4 className="font-bold text-blue-900 mb-3">Required Columns (Must Have):</h4>
+              <ul className="text-sm text-blue-800 space-y-2">
+                <li><strong>timestamp:</strong> ISO format (YYYY-MM-DD HH:MM:SS)</li>
+                <li><strong>location:</strong> Location name/ID (text)</li>
+                <li><strong>road_type:</strong> highway, arterial, collector, residential, or local</li>
+                <li><strong>vehicle_count:</strong> Non-negative integer</li>
+                <li><strong>avg_speed:</strong> Non-negative number (km/h)</li>
+                <li><strong>congestion_level:</strong> low, medium, high, or very_high</li>
+                <li><strong>weather:</strong> clear, rainy, cloudy, foggy, or snowy</li>
+                <li><strong>day_of_week:</strong> Monday-Sunday</li>
+              </ul>
+            </div>
+
+            <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+              <h4 className="font-bold text-amber-900 mb-3">Optional Columns (If Present):</h4>
+              <ul className="text-sm text-amber-800 space-y-2">
+                <li><strong>incident_flag:</strong> 0/1 or True/False</li>
+                <li><strong>lane_count:</strong> Non-negative integer</li>
+                <li><strong>signal_status:</strong> working, broken, or maintenance</li>
+              </ul>
+              <p className="text-xs text-amber-700 mt-3 italic">
+                Optional columns are accepted but not required. Extra unexpected columns will be ignored.
+              </p>
+            </div>
           </div>
 
-          <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
-            <h4 className="font-medium text-amber-900 mb-2">Valid Entries Only:</h4>
-            <ul className="text-sm text-amber-800 space-y-1">
-              <li>• No extra columns - only the 4 required columns</li>
-              <li>• No empty values in any column</li>
-              <li>• All vehicle counts must be numeric and non-negative</li>
-              <li>• Congestion levels must be exactly: low, medium, high, or very_high</li>
-              <li>• Time must be in ISO format (YYYY-MM-DD HH:MM:SS)</li>
+          <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+            <h4 className="font-medium text-red-900 mb-2">Validation Rules:</h4>
+            <ul className="text-sm text-red-800 space-y-1">
+              <li>• All required columns must be present and non-empty</li>
+              <li>• Column names are case-sensitive</li>
+              <li>• Numeric values cannot be negative</li>
+              <li>• String values must match exactly (case-sensitive)</li>
+              <li>• Files with validation errors will be rejected</li>
             </ul>
           </div>
         </div>

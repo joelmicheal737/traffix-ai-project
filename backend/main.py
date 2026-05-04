@@ -883,59 +883,160 @@ async def health_check():
 
 @app.post("/upload")
 async def upload_csv(file: UploadFile = File(...)):
-    """Enhanced CSV upload with data validation"""
+    """CSV upload with strict traffic data validation"""
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="Only CSV files are allowed")
-    
+
     try:
         content = await file.read()
         df = pd.read_csv(pd.io.common.StringIO(content.decode('utf-8')))
-        
-        # Validate required columns
-        required_columns = ['timestamp', 'location', 'vehicle_count', 'avg_speed', 
-                          'congestion_level', 'weather', 'day_of_week']
-        
-        if not all(col in df.columns for col in required_columns):
-            raise HTTPException(status_code=400, detail=f"CSV must contain columns: {required_columns}")
-        
+
+        # Define traffic data schema
+        required_columns = {
+            'timestamp': str,
+            'location': str,
+            'road_type': str,
+            'vehicle_count': (int, float),
+            'avg_speed': (int, float),
+            'congestion_level': str,
+            'weather': str,
+            'day_of_week': str
+        }
+
+        optional_columns = {
+            'incident_flag': (int, bool),
+            'lane_count': (int, float),
+            'signal_status': str
+        }
+
+        # Check for missing required columns
+        missing_columns = [col for col in required_columns.keys() if col not in df.columns]
+        if missing_columns:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Missing required columns: {', '.join(missing_columns)}. Required: timestamp, location, road_type, vehicle_count, avg_speed, congestion_level, weather, day_of_week"
+            )
+
+        # Validate column names (reject unexpected columns)
+        all_valid_columns = set(required_columns.keys()) | set(optional_columns.keys())
+        unexpected_columns = [col for col in df.columns if col not in all_valid_columns]
+        if unexpected_columns:
+            logger.warning(f"Unexpected columns in CSV: {unexpected_columns}. They will be ignored.")
+
+        # Data validation
+        validation_errors = []
+
+        # Validate timestamp
+        try:
+            df['timestamp'] = pd.to_datetime(df['timestamp'])
+        except Exception as e:
+            validation_errors.append(f"timestamp column: invalid date format - {str(e)}")
+
+        # Validate vehicle_count
+        if not pd.api.types.is_numeric_dtype(df['vehicle_count']):
+            validation_errors.append("vehicle_count must be numeric")
+        elif (df['vehicle_count'] < 0).any():
+            validation_errors.append("vehicle_count cannot be negative")
+
+        # Validate avg_speed
+        if not pd.api.types.is_numeric_dtype(df['avg_speed']):
+            validation_errors.append("avg_speed must be numeric")
+        elif (df['avg_speed'] < 0).any():
+            validation_errors.append("avg_speed cannot be negative")
+
+        # Validate congestion_level
+        valid_congestion_levels = {'low', 'medium', 'high', 'very_high'}
+        invalid_congestion = df[~df['congestion_level'].isin(valid_congestion_levels)]
+        if len(invalid_congestion) > 0:
+            validation_errors.append(f"congestion_level must be one of: {', '.join(valid_congestion_levels)}")
+
+        # Validate weather
+        valid_weather = {'clear', 'rainy', 'cloudy', 'foggy', 'snowy'}
+        invalid_weather = df[~df['weather'].isin(valid_weather)]
+        if len(invalid_weather) > 0:
+            validation_errors.append(f"weather must be one of: {', '.join(valid_weather)}")
+
+        # Validate day_of_week
+        valid_days = {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'}
+        invalid_days = df[~df['day_of_week'].isin(valid_days)]
+        if len(invalid_days) > 0:
+            validation_errors.append(f"day_of_week must be one of: {', '.join(valid_days)}")
+
+        # Validate road_type
+        valid_road_types = {'highway', 'arterial', 'collector', 'residential', 'local'}
+        invalid_roads = df[~df['road_type'].isin(valid_road_types)]
+        if len(invalid_roads) > 0:
+            validation_errors.append(f"road_type must be one of: {', '.join(valid_road_types)}")
+
+        if validation_errors:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Data validation failed: {'; '.join(validation_errors)}"
+            )
+
+        # Validate optional columns if present
+        if 'incident_flag' in df.columns:
+            if not all(df['incident_flag'].isin([0, 1, True, False])):
+                raise HTTPException(status_code=400, detail="incident_flag must be 0/1 or True/False")
+
+        if 'lane_count' in df.columns:
+            if not pd.api.types.is_numeric_dtype(df['lane_count']):
+                raise HTTPException(status_code=400, detail="lane_count must be numeric")
+            if (df['lane_count'] < 0).any():
+                raise HTTPException(status_code=400, detail="lane_count cannot be negative")
+
+        if 'signal_status' in df.columns:
+            valid_signal_status = {'working', 'broken', 'maintenance'}
+            invalid_signals = df[~df['signal_status'].isin(valid_signal_status)]
+            if len(invalid_signals) > 0:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"signal_status must be one of: {', '.join(valid_signal_status)}"
+                )
+
         # Data preprocessing and enhancement
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
         df['hour'] = df['timestamp'].dt.hour
         df['is_weekend'] = df['timestamp'].dt.dayofweek.isin([5, 6])
-        
-        # Add default values for optional columns
-        if 'temperature' not in df.columns:
-            df['temperature'] = 25.0
-        if 'humidity' not in df.columns:
-            df['humidity'] = 60.0
-        if 'visibility' not in df.columns:
-            df['visibility'] = 10.0
-        
-        # Insert enhanced data into database
+
+        # Keep only valid columns for database
+        db_columns = list(required_columns.keys()) + [col for col in optional_columns.keys() if col in df.columns]
+        df = df[db_columns + ['hour', 'is_weekend']]
+
+        # Insert validated data into database
         conn = sqlite3.connect(DATABASE_PATH)
         df.to_sql('traffic_data', conn, if_exists='append', index=False)
         conn.close()
-        
+
         # Data quality metrics
         quality_metrics = {
-            'completeness': (df.isnull().sum().sum() / (len(df) * len(df.columns))) * 100,
-            'unique_locations': df['location'].nunique(),
+            'total_rows': len(df),
+            'completeness': round(100 - (df.isnull().sum().sum() / (len(df) * len(df.columns)) * 100), 2),
+            'unique_locations': int(df['location'].nunique()),
             'date_range': {
                 'start': df['timestamp'].min().isoformat(),
                 'end': df['timestamp'].max().isoformat()
             },
-            'congestion_distribution': df['congestion_level'].value_counts().to_dict()
+            'congestion_distribution': df['congestion_level'].value_counts().to_dict(),
+            'road_type_distribution': df['road_type'].value_counts().to_dict(),
+            'weather_distribution': df['weather'].value_counts().to_dict()
         }
-        
+
         return {
-            "message": "Data uploaded successfully",
+            "message": "Traffic data uploaded successfully",
             "rows_inserted": len(df),
-            "locations": df['location'].unique().tolist(),
-            "quality_metrics": quality_metrics
+            "locations": sorted(df['location'].unique().tolist()),
+            "quality_metrics": quality_metrics,
+            "schema_validation": {
+                "required_columns": list(required_columns.keys()),
+                "optional_columns": list(optional_columns.keys()),
+                "present_optional": [col for col in optional_columns.keys() if col in df.columns]
+            }
         }
-        
+
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid traffic CSV file: {str(e)}")
 
 @app.post("/train-model")
 async def train_model(request: ModelTrainingRequest):
